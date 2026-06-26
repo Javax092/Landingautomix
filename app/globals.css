@@ -1,0 +1,352 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #050505 0%, #0b0b0d 48%, rgba(69, 10, 10, 0.42) 100%);
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 5.5rem;
+  }
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+::selection {
+  background: rgba(239, 68, 68, 0.42);
+  color: #ffffff;
+}
+
+.premium-panel {
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.045), transparent 28%),
+    linear-gradient(145deg, rgba(17, 17, 20, 0.94), rgba(5, 5, 5, 0.84));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+}
+
+.premium-button {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(135deg, #991b1b 0%, #7f1d1d 56%, #dc2626 120%);
+  box-shadow: 0 18px 52px rgba(127, 29, 29, 0.34);
+}
+
+.premium-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.26) 45%, transparent 64%);
+  transform: translateX(-135%);
+  transition: transform 700ms ease;
+}
+
+.premium-button:hover::before {
+  transform: translateX(135%);
+}
+
+.premium-button > * {
+  position: relative;
+}
+
+.hero-image {
+  object-position: 70% 35%;
+}
+
+.hero-gradient {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.5) 54%,
+      rgba(0, 0, 0, 0.18) 100%
+    );
+  background-size: 125% 125%;
+  animation: premium-gradient 16s ease-in-out infinite alternate;
+}
+
+.hero-copy {
+  animation: fade-up 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-seal {
+  opacity: 0;
+  animation: fade-up 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-benefits {
+  align-items: stretch;
+}
+
+.hero-seal:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(12, 12, 14, 0.52);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 16px 44px rgba(0, 0, 0, 0.24);
+}
+
+.concierge-step {
+  animation: fade-slide 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.premium-panel,
+.vehicle-card,
+.group {
+  will-change: transform;
+}
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.45rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ef4444, transparent);
+  opacity: 0;
+  transform: scaleX(0.35);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.nav-link:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.section-band {
+  position: relative;
+  isolation: isolate;
+}
+
+.section-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(127, 29, 29, 0.18), transparent 24rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 42%);
+  pointer-events: none;
+}
+
+.section-band-alt {
+  background: linear-gradient(180deg, rgba(17, 17, 20, 0.72), rgba(5, 5, 5, 0.32));
+}
+
+.premium-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.32), transparent);
+}
+
+.reveal-on-scroll {
+  transition:
+    opacity 720ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.motion-ready .reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.motion-ready .reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-1 {
+  transition-delay: 90ms;
+}
+
+.stagger-2 {
+  transition-delay: 160ms;
+}
+
+.stagger-3 {
+  transition-delay: 230ms;
+}
+
+.stagger-4 {
+  transition-delay: 300ms;
+}
+
+.vehicle-card {
+  transition:
+    border-color 280ms ease,
+    box-shadow 280ms ease,
+    transform 280ms ease;
+}
+
+.vehicle-media,
+.vehicle-silhouette {
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.trade-fields {
+  animation: trade-fields-in 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes trade-fields-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes premium-gradient {
+  from {
+    background-position: 0% 50%;
+  }
+
+  to {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-slide {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .vehicle-card:hover {
+    border-color: rgba(239, 68, 68, 0.38);
+    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.52), 0 0 0 1px rgba(239, 68, 68, 0.12);
+    transform: translateY(-4px) scale(1.01);
+  }
+
+  .vehicle-card:hover .vehicle-media {
+    transform: scale(1.025);
+  }
+
+  .vehicle-card:hover .vehicle-silhouette {
+    transform: translateY(-2px) scale(1.035);
+  }
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid rgba(239, 68, 68, 0.86);
+  outline-offset: 3px;
+}
+
+select option {
+  background: #111114;
+  color: #ffffff;
+}
+
+@media (max-width: 1279px) {
+  .hero-image {
+    object-position: 72% 36%;
+  }
+}
+
+@media (max-width: 1023px) {
+  .hero-image {
+    object-position: 80% 37%;
+  }
+
+  .hero-gradient {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.86) 0%,
+        rgba(0, 0, 0, 0.54) 54%,
+        rgba(0, 0, 0, 0.2) 100%
+      );
+  }
+}
+
+@media (max-width: 639px) {
+  .hero-image {
+    object-position: 88% 38%;
+  }
+
+  .hero-gradient {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.88) 0%,
+        rgba(0, 0, 0, 0.56) 58%,
+        rgba(0, 0, 0, 0.22) 100%
+      );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .motion-ready .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+  }
+}
