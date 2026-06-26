@@ -1,1 +1,11 @@
-{"version":4,"routes":{"/veiculos/bmw-x6-competition":{},"/veiculos/porsche-718":{},"/veiculos/ram-1500":{},"/veiculos/dakota":{},"/veiculos/mercedes-gla-200":{}},"dynamicRoutes":{"/veiculos/[slug]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/veiculos/[slug]","routeRegex":"^\\/veiculos\\/([^/]+?)(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"98353c1230d44c7334ad56a2ee8eb6cf","previewModeSigningKey":"221e43230d52a434f62709af2639a67a521a39f46cd5d868174fc08de3262b7b","previewModeEncryptionKey":"3da85527f190109c794ce95a2e53b25ed6eb06a583f024cf54db122d82c1940a"}}
+{
+  "version": 4,
+  "routes": {},
+  "dynamicRoutes": {},
+  "notFoundRoutes": [],
+  "preview": {
+    "previewModeId": "f95cce35e52af37ad472b0239b7b9ee8",
+    "previewModeSigningKey": "46e1101b073584b53ba218c2339a613942e278db52d9f5c8bdba88f2ba3271b9",
+    "previewModeEncryptionKey": "1a92590bd8b4767f5697eae81aed2fbf3ee9138c8ba261828222ce3830f31d69"
+  }
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
 import { BackToHomeButton } from "./BackToHomeButton";
 import { buildConciergeMessage, buildWhatsappUrl } from "@/lib/whatsapp";
@@ -42,6 +43,12 @@ const profileRecommendations: Record<
       year: string;
       price?: string;
       tags: string[];
+      image?: {
+        src: string;
+        alt: string;
+        objectPosition?: string;
+      };
+      curatorNote?: string;
     }[];
   }
 > = {
@@ -56,12 +63,19 @@ const profileRecommendations: Record<
         model: "C200 AMG",
         year: "2024",
         tags: ["Imagem profissional", "Tecnologia alema", "Elegancia"],
+        image: {
+          src: "/images/mercedez3.webp",
+          alt: "Mercedes-Benz C200 AMG em curadoria premium",
+        },
+        curatorNote:
+          "A escolha mais alinhada para presenca executiva sem excesso.",
       },
       {
         brand: "Volvo",
         model: "S60 Inscription",
         year: "2019/2020",
         tags: ["Conforto escandinavo", "Elegancia discreta", "Sedan premium"],
+        curatorNote: "Para quem valoriza conforto, seguranca e discricao.",
       },
       {
         brand: "Toyota",
@@ -88,12 +102,19 @@ const profileRecommendations: Record<
         model: "M3 Competition",
         year: "2022",
         tags: ["Alta performance", "Motorsport", "Status"],
+        image: {
+          src: "/images/bmw4.webp",
+          alt: "BMW em destaque na curadoria de performance",
+        },
+        curatorNote:
+          "Entrega impacto, dirigibilidade e assinatura esportiva premium.",
       },
       {
         brand: "Chevrolet",
         model: "Corvette V8",
         year: "2024/2025",
         tags: ["Icone americano", "V8", "Exclusividade"],
+        curatorNote: "Uma recomendacao para quem busca algo raro e memoravel.",
       },
       {
         brand: "Mercedes-AMG",
@@ -120,12 +141,20 @@ const profileRecommendations: Record<
         model: "SW4 Platinum",
         year: "2025/2026",
         tags: ["7 lugares", "Seguranca Toyota", "Viagens em familia"],
+        image: {
+          src: "/images/sw4.webp",
+          alt: "Toyota SW4 em curadoria familiar premium",
+          objectPosition: "50% 44%",
+        },
+        curatorNote: "Prioriza conforto familiar, robustez e liquidez.",
       },
       {
         brand: "Volvo",
         model: "XC60 T8",
         year: "2025/2026",
         tags: ["SUV premium", "Hibrido", "Conforto executivo"],
+        curatorNote:
+          "Um SUV para familia com pegada mais tecnologica e refinada.",
       },
       {
         brand: "Jeep",
@@ -151,12 +180,25 @@ const profileRecommendations: Record<
         model: "1500 Laramie Night Edition",
         year: "2025",
         tags: ["Presenca absoluta", "Luxo", "Forca"],
+        image: {
+          src: "/images/ram150.webp",
+          alt: "RAM 1500 Laramie Night Edition em destaque",
+          objectPosition: "50% 54%",
+        },
+        curatorNote:
+          "A recomendacao para maxima presenca e conforto fora da rotina.",
       },
       {
-        brand: "Ford",
-        model: "Ranger Raptor",
-        year: "2026",
-        tags: ["Off-road extremo", "Tecnologia Ford", "Imponencia"],
+        brand: "Toyota",
+        model: "Hilux SRX Plus",
+        year: "2025/2026",
+        tags: ["Confiabilidade", "Robustez", "Pronta para tudo"],
+        image: {
+          src: "/images/hillux.webp",
+          alt: "Toyota Hilux SRX Plus em curadoria de aventura sofisticada",
+        },
+        curatorNote:
+          "Robusta, desejada e facil de defender como compra inteligente.",
       },
       {
         brand: "Land Rover",
@@ -165,10 +207,10 @@ const profileRecommendations: Record<
         tags: ["SUV premium", "Sofisticacao", "Conforto"],
       },
       {
-        brand: "Toyota",
-        model: "Hilux SRX Plus",
-        year: "2025/2026",
-        tags: ["Confiabilidade", "Robustez", "Pronta para tudo"],
+        brand: "Ford",
+        model: "Ranger Raptor",
+        year: "2026",
+        tags: ["Off-road extremo", "Tecnologia Ford", "Imponencia"],
       },
     ],
   },
@@ -282,6 +324,8 @@ export function ConciergeConfigurator() {
     profiles.find((item) => item.title === profile) ?? profiles[0];
   const selectedRecommendations =
     profileRecommendations[selectedProfile.mark as ProfileMark];
+  const highlightedVehicles = selectedRecommendations.vehicles.slice(0, 2);
+  const alternativeVehicles = selectedRecommendations.vehicles.slice(2);
   const summaries = [
     { label: "Perfil", value: profile },
     { label: "Faixa", value: budget },
@@ -420,7 +464,7 @@ export function ConciergeConfigurator() {
                       },
                       {
                         label: "Selecao",
-                        value: "4 modelos ideais",
+                        value: "Os 2 modelos que mais combinam com voce",
                       },
                     ].map((item) => (
                       <div
@@ -437,75 +481,190 @@ export function ConciergeConfigurator() {
                     ))}
                   </div>
 
-                  <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-                    {selectedRecommendations.vehicles.map((vehicle) => {
-                      const brandInitials = vehicle.brand
-                        .split(/\s|-/)
-                        .filter(Boolean)
-                        .map((word) => word[0])
-                        .join("")
-                        .slice(0, 3)
-                        .toUpperCase();
+                  <div className="mt-6">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.26em] text-red-300">
+                          Curadoria exclusiva para seu perfil
+                        </p>
+                        <h4 className="mt-2 text-lg font-semibold text-white">
+                          Os 2 modelos que mais combinam com voce
+                        </h4>
+                      </div>
+                      <p className="max-w-sm text-sm leading-6 text-zinc-500">
+                        Recomendacoes priorizadas por imagem, perfil de uso e
+                        potencial de compra consultiva.
+                      </p>
+                    </div>
 
-                      return (
-                        <article
-                          key={`${selectedProfile.mark}-${vehicle.brand}-${vehicle.model}`}
-                          className="group overflow-hidden border border-white/10 bg-[#08080a] transition duration-300 hover:-translate-y-1 hover:border-red-500/35 hover:bg-white/[0.035]"
-                        >
-                          <div className="relative min-h-36 overflow-hidden border-b border-white/10 bg-[linear-gradient(145deg,#17171a,#050505_58%,#260707)] p-4">
-                            <div className="absolute inset-0 opacity-[0.14] [background-image:linear-gradient(135deg,rgba(255,255,255,.14)_1px,transparent_1px)] [background-size:12px_12px]" />
-                            <div className="relative flex h-full min-h-28 flex-col justify-between">
-                              <div className="flex items-start justify-between gap-3">
-                                <p className="text-2xl font-semibold uppercase tracking-[0.16em] text-white/80">
-                                  {brandInitials}
-                                </p>
-                                <span className="border border-white/10 bg-black/35 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-zinc-400">
-                                  Imagem em breve
-                                </span>
+                    <div className="mt-4 grid gap-4 md:grid-cols-2">
+                      {highlightedVehicles.map((vehicle, index) => {
+                        const brandInitials = vehicle.brand
+                          .split(/\s|-/)
+                          .filter(Boolean)
+                          .map((word) => word[0])
+                          .join("")
+                          .slice(0, 3)
+                          .toUpperCase();
+
+                        return (
+                          <article
+                            key={`${selectedProfile.mark}-highlight-${vehicle.brand}-${vehicle.model}`}
+                            className="group overflow-hidden border border-white/10 bg-[#08080a] shadow-[0_24px_70px_rgba(0,0,0,0.34)] transition duration-300 hover:-translate-y-1 hover:border-red-500/35 hover:bg-white/[0.035]"
+                          >
+                            <div className="relative min-h-[260px] overflow-hidden border-b border-white/10 bg-[linear-gradient(145deg,#17171a,#050505_58%,#260707)] md:min-h-[320px]">
+                              {vehicle.image ? (
+                                <Image
+                                  src={vehicle.image.src}
+                                  alt={vehicle.image.alt}
+                                  fill
+                                  sizes="(max-width: 768px) 100vw, 50vw"
+                                  className="object-cover transition duration-700 group-hover:scale-[1.025]"
+                                  style={{
+                                    objectPosition:
+                                      vehicle.image.objectPosition ?? "50% 50%",
+                                  }}
+                                />
+                              ) : (
+                                <div className="relative flex min-h-[260px] flex-col justify-between overflow-hidden p-5 md:min-h-[320px]">
+                                  <div className="absolute inset-0 bg-[linear-gradient(145deg,#202024,#050505_58%,#3b0a0a)]" />
+                                  <div className="absolute inset-0 opacity-[0.14] [background-image:linear-gradient(135deg,rgba(255,255,255,.14)_1px,transparent_1px)] [background-size:12px_12px]" />
+                                  <p className="relative text-5xl font-semibold uppercase tracking-[0.18em] text-white/80">
+                                    {brandInitials}
+                                  </p>
+                                  <div className="relative">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-red-300/80">
+                                      {vehicle.brand}
+                                    </p>
+                                    <p className="mt-2 text-2xl font-semibold text-white">
+                                      {vehicle.model}
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
+                              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/55 to-transparent p-4">
+                                <div className="flex items-center justify-between gap-3">
+                                  <span className="border border-red-400/35 bg-red-950/50 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-red-100">
+                                    Destaque {index + 1}
+                                  </span>
+                                  <span className="border border-white/15 bg-black/45 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-zinc-200">
+                                    {vehicle.image
+                                      ? "Foto real"
+                                      : "Fallback premium"}
+                                  </span>
+                                </div>
                               </div>
-                              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-red-300/80">
+                            </div>
+                            <div className="flex min-h-72 flex-col p-5">
+                              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
                                 {vehicle.brand}
                               </p>
-                            </div>
-                          </div>
-                          <div className="flex min-h-64 flex-col p-4">
-                            <p className="text-base font-semibold leading-snug text-white">
-                              {vehicle.model}
-                            </p>
-                            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-zinc-500">
-                              <span>{vehicle.year}</span>
-                              {vehicle.price ? (
-                                <>
-                                  <span className="h-1 w-1 rounded-full bg-red-400/70" />
-                                  <span className="font-semibold text-zinc-300">
-                                    {vehicle.price}
-                                  </span>
-                                </>
+                              <h5 className="mt-2 text-2xl font-semibold leading-tight text-white">
+                                {vehicle.model}
+                              </h5>
+                              <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
+                                <span>{vehicle.year}</span>
+                                {vehicle.price ? (
+                                  <>
+                                    <span className="h-1 w-1 rounded-full bg-red-400/70" />
+                                    <span className="font-semibold text-zinc-300">
+                                      {vehicle.price}
+                                    </span>
+                                  </>
+                                ) : null}
+                              </div>
+                              {vehicle.curatorNote ? (
+                                <p className="mt-4 text-sm leading-6 text-zinc-400">
+                                  {vehicle.curatorNote}
+                                </p>
                               ) : null}
+                              <div className="mt-5 flex flex-wrap gap-2">
+                                {vehicle.tags.map((tag) => (
+                                  <span
+                                    key={tag}
+                                    className="border border-white/10 bg-white/[0.035] px-2.5 py-1 text-[11px] leading-none text-zinc-300"
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                              <a
+                                href={whatsappUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="premium-button mt-auto inline-flex min-h-12 items-center justify-center rounded-md px-5 text-sm font-semibold text-white"
+                              >
+                                <span>Quero analisar este modelo</span>
+                              </a>
                             </div>
-                            <div className="mt-4 flex flex-wrap gap-2">
-                              {vehicle.tags.map((tag) => (
-                                <span
-                                  key={tag}
-                                  className="border border-white/10 bg-white/[0.035] px-2.5 py-1 text-[11px] leading-none text-zinc-300"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
+                          </article>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="mt-7 border-t border-white/10 pt-5">
+                    <p className="text-sm font-semibold text-white">
+                      Outras opcoes para o seu perfil
+                    </p>
+                    <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                      {alternativeVehicles.map((vehicle) => {
+                        const brandInitials = vehicle.brand
+                          .split(/\s|-/)
+                          .filter(Boolean)
+                          .map((word) => word[0])
+                          .join("")
+                          .slice(0, 3)
+                          .toUpperCase();
+
+                        return (
+                          <article
+                            key={`${selectedProfile.mark}-alternative-${vehicle.brand}-${vehicle.model}`}
+                            className="group flex items-center gap-3 border border-white/10 bg-white/[0.025] p-3 transition hover:border-red-500/30 hover:bg-white/[0.045]"
+                          >
+                            <div className="flex h-14 w-14 shrink-0 items-center justify-center border border-white/10 bg-[linear-gradient(145deg,#17171a,#050505_58%,#260707)] text-sm font-semibold uppercase tracking-[0.12em] text-white/75">
+                              {brandInitials}
                             </div>
-                            <a
-                              href={whatsappUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="mt-auto inline-flex min-h-11 items-center justify-between border-t border-white/10 pt-4 text-sm font-semibold text-white transition group-hover:text-red-200"
-                            >
-                              <span>Ver curadoria</span>
-                              <span aria-hidden="true">-&gt;</span>
-                            </a>
-                          </div>
-                        </article>
-                      );
-                    })}
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate text-sm font-semibold leading-snug text-white">
+                                {vehicle.brand} {vehicle.model}
+                              </p>
+                              <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-zinc-500">
+                                <span>{vehicle.year}</span>
+                                {vehicle.price ? (
+                                  <>
+                                    <span className="h-1 w-1 rounded-full bg-red-400/70" />
+                                    <span className="font-semibold text-zinc-300">
+                                      {vehicle.price}
+                                    </span>
+                                  </>
+                                ) : null}
+                              </div>
+                            </div>
+                          </article>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex flex-col gap-4 border border-red-500/20 bg-red-950/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="text-base font-semibold text-white">
+                        Nao encontrou o modelo ideal?
+                      </p>
+                      <p className="mt-1 text-sm leading-6 text-zinc-400">
+                        Breno pode montar uma busca personalizada com base no
+                        seu perfil e momento de compra.
+                      </p>
+                    </div>
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="premium-button inline-flex min-h-11 shrink-0 items-center justify-center rounded-md px-5 text-sm font-semibold text-white"
+                    >
+                      <span>Receber curadoria personalizada</span>
+                    </a>
                   </div>
                   <div className="mt-5 flex flex-col gap-3 border-t border-white/10 pt-5 sm:flex-row sm:flex-wrap">
                     <a

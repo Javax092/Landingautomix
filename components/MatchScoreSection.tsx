@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { vehicles } from "@/lib/vehicles";
 import { buildVehicleInterestMessage, buildWhatsappUrl } from "@/lib/whatsapp";
 import { AnimatedSection } from "./AnimatedSection";
@@ -35,8 +36,21 @@ export function MatchScoreSection() {
             return (
               <article
                 key={vehicle.id}
-                className="group grid gap-4 border border-white/10 bg-white/[0.035] p-4 backdrop-blur transition duration-300 hover:scale-[1.01] hover:border-red-500/35 md:grid-cols-[minmax(0,1fr)_auto] md:items-center"
+                className="group grid gap-4 border border-white/10 bg-white/[0.035] p-3 backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:border-red-500/35 hover:bg-white/[0.05] sm:p-4 md:grid-cols-[112px_minmax(0,1fr)_auto] md:items-center"
               >
+                <div className="relative aspect-[16/10] overflow-hidden border border-white/10 bg-zinc-950 md:aspect-square">
+                  <Image
+                    src={vehicle.image}
+                    alt={fullName}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 112px"
+                    className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                    style={{
+                      objectPosition: vehicle.imagePosition ?? "50% 50%",
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
+                </div>
                 <div>
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>

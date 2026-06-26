@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { buildVehicleInterestMessage, buildWhatsappUrl } from "@/lib/whatsapp";
@@ -21,17 +22,24 @@ export function VehicleCard({ vehicle, featured = false }: VehicleCardProps) {
     ? "vehicle-card flex h-full flex-col overflow-hidden border border-white/10 bg-white/[0.035] shadow-premium backdrop-blur lg:col-span-2"
     : "vehicle-card flex h-full flex-col overflow-hidden border border-white/10 bg-white/[0.035] shadow-premium backdrop-blur";
   const mediaClass = featured
-    ? "vehicle-media relative aspect-[16/7] min-h-[280px] overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-red-950/30"
-    : "vehicle-media relative aspect-[1.35/1] overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-red-950/30";
+    ? "vehicle-media relative aspect-[16/9] min-h-[240px] overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-red-950/30 sm:aspect-[16/8] lg:aspect-[16/7] lg:min-h-[300px]"
+    : "vehicle-media relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-red-950/30 sm:aspect-[1.35/1]";
 
   return (
     <article className={cardClass}>
       <div className={mediaClass}>
         {!imageFailed ? (
-          <img
+          <Image
             src={vehicle.image}
             alt={fullName}
-            className="h-full w-full object-cover"
+            fill
+            sizes={
+              featured
+                ? "(max-width: 1024px) 100vw, 50vw"
+                : "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+            }
+            className="object-cover"
+            style={{ objectPosition: vehicle.imagePosition ?? "50% 50%" }}
             onError={() => setImageFailed(true)}
           />
         ) : (

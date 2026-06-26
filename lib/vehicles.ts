@@ -18,6 +18,7 @@ export type Vehicle = {
   category: string;
   idealProfile: string;
   image: string;
+  imagePosition?: string;
   gallery?: string[];
   profile: VehicleProfile;
   collection: string;
@@ -37,6 +38,7 @@ export const vehicles: Vehicle[] = [
     category: "SUV Coupe Performance",
     idealProfile: "Performance & Status",
     image: "/images/bmwx6comp.webp",
+    imagePosition: "50% 58%",
     gallery: [
       "/images/vehicles/bmw-x6-competition.webp",
       "/images/x6comp.webp",
@@ -60,6 +62,7 @@ export const vehicles: Vehicle[] = [
     category: "Esportivo Premium",
     idealProfile: "Prazer ao dirigir",
     image: "/images/718porsche.webp",
+    imagePosition: "50% 56%",
     gallery: ["/images/vehicles/porsche-718.webp", "/images/718.webp"],
     profile: "Prazer ao dirigir",
     collection: "Seleção especial",
@@ -82,6 +85,7 @@ export const vehicles: Vehicle[] = [
     category: "Picape Premium",
     idealProfile: "Aventura Sofisticada",
     image: "/images/ram150.webp",
+    imagePosition: "50% 48%",
     gallery: [
       "/images/vehicles/ram-1500.webp",
       "/images/1500preta.webp",
@@ -108,6 +112,7 @@ export const vehicles: Vehicle[] = [
     category: "Picape de Uso Misto",
     idealProfile: "Forca com personalidade",
     image: "/images/dakota.webp",
+    imagePosition: "50% 54%",
     gallery: [
       "/images/vehicles/dakota.webp",
       "/images/dakota2.webp",
@@ -134,6 +139,7 @@ export const vehicles: Vehicle[] = [
     category: "SUV Compacto Premium",
     idealProfile: "Executivo Discreto",
     image: "/images/gla200.webp",
+    imagePosition: "50% 55%",
     gallery: [
       "/images/vehicles/mercedes-gla-200.webp",
       "/images/gla200a.webp",

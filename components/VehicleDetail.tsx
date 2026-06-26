@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { BackToHomeButton } from "./BackToHomeButton";
 import { buildVehicleInterestMessage, buildWhatsappUrl } from "@/lib/whatsapp";
@@ -31,10 +32,14 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
   return (
     <main className="bg-[#050505]">
       <section className="relative min-h-[82svh] overflow-hidden pt-24">
-        <img
+        <Image
           src={vehicle.image}
           alt={`${vehicle.brand} ${vehicle.model}`}
-          className="absolute inset-0 h-full w-full object-cover opacity-75"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-75"
+          style={{ objectPosition: vehicle.imagePosition ?? "50% 50%" }}
         />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.96)_0%,rgba(5,5,5,0.66)_48%,rgba(69,10,10,0.18)_100%)]" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#050505] to-transparent" />
@@ -106,12 +111,15 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
               {gallery.slice(1).map((image) => (
                 <div
                   key={image}
-                  className="aspect-[4/3] overflow-hidden border border-white/10 bg-zinc-950"
+                  className="relative aspect-[4/3] overflow-hidden border border-white/10 bg-zinc-950"
                 >
-                  <img
+                  <Image
                     src={image}
                     alt={`${vehicle.brand} ${vehicle.model}`}
-                    className="h-full w-full object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                    style={{ objectPosition: vehicle.imagePosition ?? "50% 50%" }}
                   />
                 </div>
               ))}

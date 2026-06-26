@@ -27,7 +27,8 @@ export function AboutBreno() {
               alt="Breno, consultor automotivo da Automix Manaus"
               fill
               sizes="(max-width: 1024px) 92vw, 560px"
-              className="object-cover object-center"
+              className="object-cover"
+              style={{ objectPosition: "50% 42%" }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
             <div className="absolute left-4 top-4 border border-red-500/30 bg-black/50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-red-200 backdrop-blur-md">
@@ -78,7 +79,7 @@ export function AboutBreno() {
             {authorityPoints.map((point) => (
               <div
                 key={point}
-                className="group border border-white/10 bg-white/[0.035] px-4 py-4 transition duration-300 hover:scale-[1.01] hover:border-red-500/35 hover:bg-white/[0.055]"
+                className="group flex min-h-28 flex-col justify-between border border-white/10 bg-white/[0.035] px-4 py-4 transition duration-300 hover:-translate-y-0.5 hover:border-red-500/35 hover:bg-white/[0.055]"
               >
                 <span className="block h-px w-8 bg-red-500/70 transition group-hover:w-12" />
                 <p className="mt-3 text-sm font-medium text-zinc-200">
