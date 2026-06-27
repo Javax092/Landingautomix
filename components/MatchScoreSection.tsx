@@ -3,6 +3,7 @@ import { vehicles } from "@/lib/vehicles";
 import { buildVehicleInterestMessage, buildWhatsappUrl } from "@/lib/whatsapp";
 import { AnimatedSection } from "./AnimatedSection";
 import { BackToHomeButton } from "./BackToHomeButton";
+import { PremiumImage } from "./PremiumImage";
 
 const scores = [94, 91, 88];
 
@@ -10,8 +11,10 @@ export function MatchScoreSection() {
   return (
     <AnimatedSection
       id="compatibilidade"
-      className="bg-[#050505] px-5 py-12 md:px-8 md:py-16"
+      className="relative isolate overflow-hidden bg-[#050505] px-5 py-16 md:px-8 md:py-24"
     >
+      <PremiumImage src="/images/newdescovery.webp" alt="Veículo premium em rota selecionada" fill sizes="100vw" className="premium-section-image -z-20 object-cover" />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(105deg,rgba(5,5,7,.98),rgba(5,5,7,.88)_55%,rgba(35,12,14,.78))]" />
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-red-400">

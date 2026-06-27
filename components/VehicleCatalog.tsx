@@ -1,13 +1,16 @@
 import { vehicles } from "@/lib/vehicles";
 import { AnimatedSection } from "./AnimatedSection";
 import { VehicleCard } from "./VehicleCard";
+import { PremiumImage } from "./PremiumImage";
 
 export function VehicleCatalog() {
   return (
     <AnimatedSection
       id="estoque"
-      className="section-band px-5 py-12 md:px-8 md:py-16"
+      className="section-band relative isolate overflow-hidden px-5 py-16 md:px-8 md:py-24"
     >
+      <PremiumImage src="/images/landinterior.webp" alt="Garagem premium e interior sofisticado" fill sizes="100vw" className="premium-section-image -z-20 object-cover" />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(115deg,rgba(5,5,7,.97),rgba(5,5,7,.9),rgba(23,9,11,.82))]" />
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div className="max-w-2xl">

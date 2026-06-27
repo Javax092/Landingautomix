@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { BackToHomeButton } from "./BackToHomeButton";
 import { buildVipMessage, buildWhatsappUrl } from "@/lib/whatsapp";
 import { AnimatedSection } from "./AnimatedSection";
+import { PremiumImage } from "./PremiumImage";
 
 const profiles = [
   "Executivo Discreto",
@@ -61,8 +62,10 @@ export function VipLeadForm() {
   return (
     <AnimatedSection
       id="lista-vip"
-      className="bg-gradient-to-br from-black via-zinc-950 to-red-950/40 px-5 py-12 md:px-8 md:py-16"
+      className="relative isolate overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-red-950/40 px-5 py-16 md:px-8 md:py-24"
     >
+      <PremiumImage src="/images/interiorland.webp" alt="Ambiente executivo premium" fill sizes="100vw" className="premium-section-image -z-20 object-cover" />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(105deg,rgba(5,5,7,.97),rgba(7,7,9,.9),rgba(46,12,15,.78))]" />
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
         <div>
           <p className="inline-flex border border-red-500/30 bg-red-950/20 px-3 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-red-300 backdrop-blur">

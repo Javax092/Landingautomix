@@ -19,6 +19,9 @@ const config: Config = {
         platinum: "#FFFFFF",
         smoke: "#D1D5DB"
       },
+      fontFamily: {
+        serif: ["var(--font-playfair)", "Georgia", "serif"]
+      },
       boxShadow: {
         premium: "0 24px 80px rgba(0, 0, 0, 0.48)",
         green: "0 18px 60px rgba(127, 29, 29, 0.28)"

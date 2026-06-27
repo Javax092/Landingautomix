@@ -18,9 +18,10 @@ export function VehicleCard({ vehicle, featured = false }: VehicleCardProps) {
     buildVehicleInterestMessage(vehicle.brand, vehicle.model),
   );
 
-  const cardClass = featured
-    ? "vehicle-card flex h-full flex-col overflow-hidden border border-white/10 bg-white/[0.035] shadow-premium backdrop-blur lg:col-span-2"
-    : "vehicle-card flex h-full flex-col overflow-hidden border border-white/10 bg-white/[0.035] shadow-premium backdrop-blur";
+  const cardClass = [
+    "vehicle-card flex h-full flex-col overflow-hidden border border-white/10 bg-white/[0.035] shadow-premium backdrop-blur",
+    featured ? "lg:col-span-2" : "",
+  ].join(" ");
   const mediaClass = featured
     ? "vehicle-media relative aspect-[16/9] min-h-[240px] overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-red-950/30 sm:aspect-[16/8] lg:aspect-[16/7] lg:min-h-[300px]"
     : "vehicle-media relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-red-950/30 sm:aspect-[1.35/1]";
@@ -43,13 +44,12 @@ export function VehicleCard({ vehicle, featured = false }: VehicleCardProps) {
             onError={() => setImageFailed(true)}
           />
         ) : (
-          <div className="flex h-full items-end justify-center p-8">
-            <div className="w-full max-w-xs border border-white/12 bg-black/30 p-5">
+          <div className="flex h-full items-end justify-center bg-[radial-gradient(circle_at_50%_35%,#241719,#070709_70%)] p-8">
+            <div className="w-full max-w-xs border-t border-white/20 bg-black/20 p-5 text-center">
               <p className="text-xs uppercase tracking-[0.24em] text-red-300">
-                Imagem local
+                Imagem em atualização
               </p>
               <p className="mt-2 text-lg font-semibold text-white">{fullName}</p>
-              <p className="mt-1 text-sm text-zinc-500">{vehicle.image}</p>
             </div>
           </div>
         )}

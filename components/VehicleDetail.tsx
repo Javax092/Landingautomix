@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BackToHomeButton } from "./BackToHomeButton";
 import { buildVehicleInterestMessage, buildWhatsappUrl } from "@/lib/whatsapp";
 import type { Vehicle } from "@/lib/vehicles";
+import { VehicleGallery } from "./VehicleGallery";
 
 type VehicleDetailProps = {
   vehicle: Vehicle;
@@ -107,22 +108,8 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
               ))}
             </div>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              {gallery.slice(1).map((image) => (
-                <div
-                  key={image}
-                  className="relative aspect-[4/3] overflow-hidden border border-white/10 bg-zinc-950"
-                >
-                  <Image
-                    src={image}
-                    alt={`${vehicle.brand} ${vehicle.model}`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover"
-                    style={{ objectPosition: vehicle.imagePosition ?? "50% 50%" }}
-                  />
-                </div>
-              ))}
+            <div className="mt-8">
+              <VehicleGallery images={gallery} name={`${vehicle.brand} ${vehicle.model}`} objectPosition={vehicle.imagePosition} />
             </div>
 
             <div className="mt-10 border-l border-red-500/50 bg-white/[0.025] p-6 md:p-8">

@@ -5,6 +5,7 @@ import { useMemo, useRef, useState } from "react";
 import { BackToHomeButton } from "./BackToHomeButton";
 import { buildConciergeMessage, buildWhatsappUrl } from "@/lib/whatsapp";
 import { AnimatedSection } from "./AnimatedSection";
+import { PremiumImage } from "./PremiumImage";
 
 const profiles = [
   {
@@ -337,6 +338,8 @@ export function ConciergeConfigurator() {
       id="configurador"
       className="section-band px-5 py-12 md:px-8 md:py-16"
     >
+      <PremiumImage src="/images/x6interior.webp" alt="Interior premium com volante e painel digital" fill sizes="100vw" className="premium-section-image -z-20 object-cover" />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(110deg,rgba(5,5,7,.97),rgba(7,7,9,.87),rgba(34,10,12,.75))]" />
       <div className="mx-auto max-w-5xl">
         <div className="mx-auto mb-8 max-w-3xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-red-400">

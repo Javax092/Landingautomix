@@ -45,10 +45,9 @@ export function SiteHeader() {
           className="group inline-flex flex-col leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
           aria-label="Ir para o topo"
         >
-          <span className="text-sm font-semibold uppercase tracking-[0.28em] text-platinum transition group-hover:text-red-300">
+          <span className="text-sm font-semibold uppercase tracking-[0.24em] text-platinum transition group-hover:text-red-300">
             Breno Automix
           </span>
-          <span className="mt-1 text-[10px] uppercase tracking-[0.22em] text-smoke"></span>
         </a>
 
         <nav
@@ -88,7 +87,7 @@ export function SiteHeader() {
             href={whatsappUrl}
             target="_blank"
             rel="noreferrer"
-            className="premium-button inline-flex min-h-10 items-center justify-center rounded-md px-4 text-xs font-semibold text-white shadow-green transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ink sm:px-5 sm:text-sm"
+            className="premium-button inline-flex min-h-10 items-center justify-center rounded-sm px-4 text-xs font-semibold text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ink sm:px-5 sm:text-sm"
           >
             <span>Falar com Breno</span>
           </a>

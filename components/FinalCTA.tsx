@@ -1,6 +1,7 @@
 import { buildWhatsappUrl } from "@/lib/whatsapp";
 import { AnimatedSection } from "./AnimatedSection";
 import { BackToHomeButton } from "./BackToHomeButton";
+import { PremiumImage } from "./PremiumImage";
 
 export function FinalCTA() {
   const whatsappUrl = buildWhatsappUrl(
@@ -12,7 +13,8 @@ export function FinalCTA() {
       id="atendimento"
       className="relative overflow-hidden px-5 py-12 md:px-8 md:py-16"
     >
-      <div className="absolute inset-0 bg-[linear-gradient(135deg,#050505,#111114_52%,rgba(69,10,10,0.72))]" />
+      <PremiumImage src="/images/gla200inter.webp" alt="Mesa executiva e interior automotivo premium" fill sizes="100vw" className="premium-section-image object-cover" />
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(5,5,5,.97),rgba(17,17,20,.9)_52%,rgba(69,10,10,.78))]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
       <div className="relative mx-auto max-w-5xl text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-red-400">
