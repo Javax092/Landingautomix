@@ -9,7 +9,7 @@ export function HeroSection() {
       className="relative isolate min-h-[92svh] overflow-hidden px-5 pb-14 pt-28 md:px-8 md:pb-20 md:pt-32"
     >
       <Image
-        src="/images/brenoauto.webp"
+        src="/images/breno-hero.webp"
         alt="foto do consultor automotivo Breno, da Automix Manaus, ao lado do carro"
         fill
         priority

@@ -9,7 +9,7 @@ const trustSignals = [
 export function HeroPremium() {
   return (
     <BackgroundSection
-      image="/images/brenoauto.webp"
+      image="/images/breno-hero.webp"
       alt="Breno ao lado de um BMW em ambiente de showroom"
       priority
       imageClassName="hero-premium-image"
@@ -23,13 +23,7 @@ export function HeroPremium() {
             <span className="h-px w-8 bg-red-400/80" aria-hidden="true" />
             Breno Automix · Manaus
           </p>
-          <h1 className="mt-5 max-w-2xl font-serif text-[2.45rem] font-medium leading-[1.02] tracking-[-0.04em] text-white sm:text-5xl md:text-6xl lg:text-[4rem]">
-            Seu próximo premium começa com uma escolha segura.
-          </h1>
-          <p className="mt-5 max-w-xl text-sm leading-6 text-zinc-200 sm:text-base sm:leading-7">
-            Curadoria automotiva, avaliação do seu usado e atendimento direto
-            com Breno.
-          </p>
+
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <a
               href="#configurador"
