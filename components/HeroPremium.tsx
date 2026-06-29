@@ -8,51 +8,63 @@ const trustSignals = [
 
 export function HeroPremium() {
   return (
-    <BackgroundSection
-      image="/images/breno-hero.webp"
-      alt="Breno ao lado de um BMW em ambiente de showroom"
-      priority
-      imageClassName="hero-premium-image"
-      overlayClassName="hero-premium-overlay"
-      className="min-h-[100svh] bg-[#050505] pt-14 md:pt-16"
-    >
-      <div id="topo" className="absolute inset-0" aria-hidden="true" />
-      <div className="relative mx-auto flex min-h-[calc(100svh-3.5rem)] max-w-7xl items-end px-5 pb-28 pt-16 sm:items-center sm:pb-12 md:min-h-[calc(100svh-4rem)] md:px-8 md:py-16">
-        <div className="hero-copy w-full max-w-2xl">
-          <p className="flex items-center gap-3 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-red-300">
-            <span className="h-px w-8 bg-red-400/80" aria-hidden="true" />
-            Breno Automix · Manaus
-          </p>
+    <>
+      <BackgroundSection
+        image="/images/breno-hero.webp"
+        alt="Breno ao lado de um BMW em ambiente de showroom"
+        priority
+        imageClassName="hero-premium-image"
+        overlayClassName="hero-premium-overlay"
+        className="hero-premium bg-[#080a0e] xl:min-h-[calc(100svh-6rem)] xl:pt-16"
+      >
+        <div id="topo" className="absolute inset-0" aria-hidden="true" />
+        <div className="relative mx-auto flex max-w-7xl px-5 pb-10 pt-[calc(3.5rem+56.3vw+2rem)] md:px-8 md:pt-[calc(4rem+56.3vw+2.5rem)] xl:min-h-[calc(100svh-10rem)] xl:items-start xl:pb-14 xl:pt-[clamp(2rem,4vh,3.5rem)]">
+          <div className="hero-copy w-full max-w-[30rem]">
+            <p className="flex items-center gap-3 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-red-200">
+              <span className="h-px w-8 bg-red-300/80" aria-hidden="true" />
+              Breno Automix · Manaus
+            </p>
 
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <a
-              href="#configurador"
-              className="premium-button inline-flex min-h-12 items-center justify-center rounded-sm px-7 text-sm font-semibold text-white"
-            >
-              <span>Solicitar curadoria</span>
-            </a>
-            <a
-              href="#estoque"
-              className="inline-flex min-h-12 items-center justify-center rounded-sm border border-white/25 bg-black/20 px-7 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-white/45 hover:bg-white/[0.08]"
-            >
-              Ver veículos
-            </a>
-          </div>
-          <div className="mt-7 grid grid-cols-3 gap-2 sm:max-w-2xl sm:gap-3">
-            {trustSignals.map((signal) => (
-              <div
-                key={signal}
-                className="min-h-16 border-t border-white/25 bg-black/20 px-2 py-3 backdrop-blur-sm sm:px-4"
+            <h1 className="mt-5 font-serif text-[2.7rem] font-medium leading-[0.98] tracking-[-0.035em] text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.38)] sm:text-5xl xl:text-[3.4rem]">
+              Curadoria automotiva de alto padrão.
+            </h1>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="#configurador"
+                className="premium-button inline-flex min-h-12 items-center justify-center rounded-sm px-7 text-sm font-semibold text-white shadow-[0_14px_42px_rgba(127,29,29,0.26)]"
               >
-                <span className="block h-1 w-1 rounded-full bg-red-400" />
-                <p className="mt-2 text-[0.6rem] font-medium uppercase leading-4 tracking-[0.1em] text-zinc-200 sm:text-[0.68rem] sm:tracking-[0.14em]">
-                  {signal}
-                </p>
-              </div>
-            ))}
+                <span>Solicitar curadoria</span>
+              </a>
+              <a
+                href="#estoque"
+                className="inline-flex min-h-12 items-center justify-center rounded-sm border border-white/30 bg-slate-950/15 px-7 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-white/50 hover:bg-white/[0.09]"
+              >
+                Ver veículos
+              </a>
+            </div>
           </div>
         </div>
+      </BackgroundSection>
+
+      <div
+        className="border-y border-white/10 bg-[#080a0e]"
+        aria-label="Diferenciais da curadoria"
+      >
+        <div className="mx-auto grid max-w-7xl grid-cols-1 px-5 sm:grid-cols-3 md:px-8">
+          {trustSignals.map((signal) => (
+            <div
+              key={signal}
+              className="flex min-h-12 items-center gap-3 border-b border-white/10 py-3 last:border-b-0 sm:min-h-20 sm:border-b-0 sm:border-r sm:px-5 sm:last:border-r-0"
+            >
+              <span className="block h-1 w-1 shrink-0 rounded-full bg-red-300" />
+              <p className="text-[0.64rem] font-medium uppercase leading-4 tracking-[0.14em] text-zinc-300 sm:text-[0.68rem]">
+                {signal}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
-    </BackgroundSection>
+    </>
   );
 }

@@ -76,6 +76,10 @@ const profileRecommendations: Record<
         model: "S60 Inscription",
         year: "2019/2020",
         tags: ["Conforto escandinavo", "Elegancia discreta", "Sedan premium"],
+        image: {
+          src: "/images/s60inscription.webp",
+          alt: "Volvo S60 Inscription em curadoria premium",
+        },
         curatorNote: "Para quem valoriza conforto, seguranca e discricao.",
       },
       {
@@ -115,6 +119,10 @@ const profileRecommendations: Record<
         model: "Corvette V8",
         year: "2024/2025",
         tags: ["Icone americano", "V8", "Exclusividade"],
+        image: {
+          src: "/images/corvete.webp",
+          alt: "Chevrolet Corvette V8 em curadoria de performance",
+        },
         curatorNote: "Uma recomendacao para quem busca algo raro e memoravel.",
       },
       {
@@ -154,6 +162,10 @@ const profileRecommendations: Record<
         model: "XC60 T8",
         year: "2025/2026",
         tags: ["SUV premium", "Hibrido", "Conforto executivo"],
+        image: {
+          src: "/images/xc60.webp",
+          alt: "Volvo XC60 T8 em curadoria familiar premium",
+        },
         curatorNote:
           "Um SUV para familia com pegada mais tecnologica e refinada.",
       },
