@@ -25,10 +25,6 @@ export function HeroPremium() {
               Breno Automix · Manaus
             </p>
 
-            <h1 className="mt-5 font-serif text-[2.7rem] font-medium leading-[0.98] tracking-[-0.035em] text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.38)] sm:text-5xl xl:text-[3.4rem]">
-              Curadoria automotiva de alto padrão.
-            </h1>
-
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
                 href="#configurador"

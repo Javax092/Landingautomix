@@ -1508,9 +1508,6 @@ video {
 .text-\[11px\] {
   font-size: 11px;
 }
-.text-\[2\.7rem\] {
-  font-size: 2.7rem;
-}
 .text-base {
   font-size: 1rem;
   line-height: 1.5rem;
@@ -1561,9 +1558,6 @@ video {
 .leading-\[0\.96\] {
   line-height: 0.96;
 }
-.leading-\[0\.98\] {
-  line-height: 0.98;
-}
 .leading-none {
   line-height: 1;
 }
@@ -1575,9 +1569,6 @@ video {
 }
 .leading-tight {
   line-height: 1.25;
-}
-.tracking-\[-0\.035em\] {
-  letter-spacing: -0.035em;
 }
 .tracking-\[0\.08em\] {
   letter-spacing: 0.08em;
@@ -1771,10 +1762,6 @@ video {
 }
 .contrast-\[\.96\] {
   --tw-contrast: contrast(.96);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-.drop-shadow-\[0_2px_24px_rgba\(0\2c 0\2c 0\2c 0\.38\)\] {
-  --tw-drop-shadow: drop-shadow(0 2px 24px rgba(0,0,0,0.38));
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 .filter {
@@ -2524,11 +2511,6 @@ select option {
     padding-right: 1.25rem;
   }
 
-  .sm\:text-5xl {
-    font-size: 3rem;
-    line-height: 1;
-  }
-
   .sm\:text-\[0\.68rem\] {
     font-size: 0.68rem;
   }
@@ -2861,10 +2843,6 @@ select option {
 
   .xl\:pt-\[clamp\(2rem\2c 4vh\2c 3\.5rem\)\] {
     padding-top: clamp(2rem, 4vh, 3.5rem);
-  }
-
-  .xl\:text-\[3\.4rem\] {
-    font-size: 3.4rem;
   }
 }
 
