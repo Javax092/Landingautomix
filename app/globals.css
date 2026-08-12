@@ -15,10 +15,16 @@ html {
   scroll-padding-top: 5rem;
 }
 
+section[id],
+#topo,
+#configurador {
+  scroll-margin-top: 5rem;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #050505 0%, #0b0b0d 48%, rgba(69, 10, 10, 0.42) 100%);
+  background: #050505;
   color: #ffffff;
   overflow-x: hidden;
 }
@@ -31,7 +37,7 @@ h3 {
 
 @media (max-width: 767px) {
   body {
-    padding-bottom: 5.5rem;
+    padding-bottom: 0;
   }
 }
 
@@ -49,19 +55,19 @@ textarea {
 }
 
 .premium-panel {
-  border: 1px solid rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.045), transparent 28%),
     linear-gradient(145deg, rgba(17, 17, 20, 0.94), rgba(5, 5, 5, 0.84));
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: 0 24px 72px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(16px);
 }
 
 .premium-button {
   position: relative;
   overflow: hidden;
-  background-image: linear-gradient(135deg, #991b1b 0%, #7f1d1d 56%, #dc2626 120%);
-  box-shadow: 0 18px 52px rgba(127, 29, 29, 0.34);
+  background: #991b1b;
+  box-shadow: 0 14px 34px rgba(127, 29, 29, 0.22);
 }
 
 .premium-button::before {
@@ -81,6 +87,89 @@ textarea {
   position: relative;
 }
 
+.motion-content {
+  opacity: 0;
+  transform: translateY(var(--motion-distance, 24px));
+  transition:
+    opacity 720ms cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay, 0ms),
+    transform 720ms cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay, 0ms);
+}
+
+.motion-content-scale {
+  transform: translateY(var(--motion-distance, 24px)) scale(0.985);
+}
+
+.motion-content.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.split-text {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.22em;
+  row-gap: 0.02em;
+}
+
+.split-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(26px);
+  animation-delay: var(--word-delay, 120ms);
+}
+
+.split-text.is-visible .split-word {
+  animation: split-word-in 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--word-delay, 120ms);
+}
+
+.magnet-shell {
+  display: inline-flex;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.cta-motion .cta-arrow {
+  display: inline-block;
+  transition: transform 220ms ease;
+}
+
+.cta-motion:hover .cta-arrow {
+  transform: translate(2px, -2px);
+}
+
+.glare-hover {
+  height: 100%;
+  overflow: hidden;
+}
+
+.glare-hover::after {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.07) 47%,
+    rgba(255, 255, 255, 0.018) 53%,
+    transparent 62%
+  );
+  opacity: 0;
+  transform: translateX(-34%) rotate(6deg);
+  transition:
+    opacity 360ms ease,
+    transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .glare-hover:hover::after,
+  .vehicle-card:hover .glare-hover::after {
+    opacity: 1;
+    transform: translateX(34%) rotate(6deg);
+  }
+}
+
 .hero-premium-image {
   width: 100%;
   height: 100%;
@@ -91,17 +180,37 @@ textarea {
   animation: cinematic-drift 22s ease-in-out infinite alternate;
 }
 
+.hero-premium-cover {
+  background-image: url("/images/breno-hero.webp");
+  background-position: 50% 48%;
+  background-size: cover;
+  filter: saturate(0.96) contrast(1.04) brightness(1.02);
+  transform: scale(1.01);
+  animation: cinematic-drift 22s ease-in-out infinite alternate;
+}
+
+.hero-premium-texture {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  mask-image: linear-gradient(90deg, black, transparent 78%);
+  opacity: 0.32;
+}
+
 .hero-premium-overlay {
   background:
-    radial-gradient(circle at 78% 38%, rgba(255, 231, 205, 0.1) 0%, rgba(109, 128, 150, 0.04) 18%, transparent 38%),
-    radial-gradient(ellipse at 52% 76%, rgba(112, 135, 155, 0.08), transparent 38%),
-    linear-gradient(90deg, rgba(6, 9, 14, 0.72) 0%, rgba(7, 10, 15, 0.47) 40%, rgba(8, 11, 16, 0.1) 72%),
-    linear-gradient(180deg, rgba(5, 7, 10, 0.12) 0%, transparent 42%, rgba(5, 7, 11, 0.48) 100%);
+    linear-gradient(90deg, rgba(3, 3, 4, 0.92) 0%, rgba(5, 5, 7, 0.58) 40%, rgba(5, 5, 7, 0) 76%),
+    linear-gradient(180deg, rgba(5, 5, 7, 0.24) 0%, rgba(5, 5, 7, 0.04) 38%, rgba(5, 5, 7, 0.68) 100%);
+}
+
+.hero-premium-scanline {
+  background: linear-gradient(180deg, transparent, #080a0e);
 }
 
 .premium-background-image:not(.hero-premium-image),
 .premium-section-image {
-  filter: saturate(0.55) brightness(0.42) contrast(1.08);
+  filter: saturate(0.72) brightness(0.62) contrast(1.06);
 }
 
 .scroll-indicator {
@@ -130,6 +239,52 @@ textarea {
   animation: fade-up 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+.animate-fade-up {
+  opacity: 0;
+  animation: fade-up 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
+}
+
+.animation-delay-800 {
+  animation-delay: 800ms;
+}
+
+.mobile-menu-item {
+  opacity: 0;
+  animation: fade-up 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.staggered-menu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(5, 5, 5, 0.94), rgba(5, 5, 5, 0.98)),
+    url("/images/landinterior.webp") center / cover;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.gradual-blur-edge {
+  position: absolute;
+  inset: auto 0 0;
+  height: 44%;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  mask-image: linear-gradient(180deg, transparent, black 72%);
+}
+
 .hero-seal {
   opacity: 0;
   animation: fade-up 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -149,7 +304,18 @@ textarea {
 }
 
 .concierge-step {
-  animation: fade-slide 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: fade-slide 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.curatorship-result-card {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: result-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--result-delay, 150ms);
+}
+
+.vehicle-detail-hero-image {
+  animation: vehicle-photo-in 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .premium-panel,
@@ -180,6 +346,11 @@ textarea {
   transform: scaleX(1);
 }
 
+.nav-link.text-white::after {
+  opacity: 0.55;
+  transform: scaleX(1);
+}
+
 .section-band {
   position: relative;
   isolation: isolate;
@@ -191,7 +362,6 @@ textarea {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(circle at 12% 8%, rgba(127, 29, 29, 0.18), transparent 24rem),
     linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 42%);
   pointer-events: none;
 }
@@ -253,6 +423,14 @@ textarea {
   animation: trade-fields-in 360ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.filter-scrollbar {
+  scrollbar-width: none;
+}
+
+.filter-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes trade-fields-in {
   from {
     opacity: 0;
@@ -287,6 +465,18 @@ textarea {
   }
 }
 
+@keyframes split-word-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fade-slide {
   from {
     opacity: 0;
@@ -309,21 +499,19 @@ textarea {
   50% { transform: translate(-50%, 7px); opacity: 0.92; }
 }
 
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  .premium-section-image {
-    transform: scale(1.08);
-  }
-}
-
 @media (hover: hover) and (pointer: fine) {
   .vehicle-card:hover {
-    border-color: rgba(239, 68, 68, 0.38);
-    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.52), 0 0 0 1px rgba(239, 68, 68, 0.12);
-    transform: translateY(-4px) scale(1.01);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.42);
+    transform: translateY(-3px);
   }
 
   .vehicle-card:hover .vehicle-media {
-    transform: scale(1.025);
+    transform: none;
+  }
+
+  .vehicle-card:hover .vehicle-photo {
+    transform: scale(1.015);
   }
 
   .vehicle-card:hover .vehicle-silhouette {
@@ -346,33 +534,21 @@ select option {
 }
 
 @media (max-width: 1279px) {
-  .hero-premium-image {
-    inset: 3.5rem 0 auto !important;
-    height: auto !important;
-    aspect-ratio: 1672 / 941;
-    object-position: center;
-    transform: none;
-    animation: none;
-  }
-
-  .hero-premium-overlay {
-    top: 3.5rem;
-    bottom: auto;
-    height: 56.3vw;
-    background: linear-gradient(180deg, rgba(5, 7, 10, 0.04), rgba(5, 7, 10, 0.2));
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1279px) {
-  .hero-premium-image,
-  .hero-premium-overlay {
-    top: 4rem;
+  .hero-premium-cover {
+    background-position: 58% 50%;
   }
 }
 
 @media (max-width: 639px) {
-  .hero-premium-image {
-    filter: saturate(1.01) contrast(1.025) brightness(1.075);
+  .hero-premium-cover {
+    background-position: 62% 50%;
+    filter: saturate(0.82) contrast(1.08) brightness(0.68);
+  }
+
+  .hero-premium-overlay {
+    background:
+      linear-gradient(90deg, rgba(3, 3, 4, 0.84), rgba(5, 5, 7, 0.52)),
+      linear-gradient(180deg, rgba(5, 5, 7, 0.46) 0%, rgba(5, 5, 7, 0.18) 34%, rgba(5, 5, 7, 0.91) 100%);
   }
 }
 
@@ -393,5 +569,37 @@ select option {
   .motion-ready .reveal-on-scroll {
     opacity: 1;
     transform: none;
+  }
+
+  .motion-content,
+  .motion-content-scale,
+  .split-word,
+  .magnet-shell {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@keyframes result-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vehicle-photo-in {
+  from {
+    opacity: 0;
+    transform: scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

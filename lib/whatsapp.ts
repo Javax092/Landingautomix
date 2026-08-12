@@ -30,6 +30,48 @@ export function buildConciergeMessage(lead: ConciergeLead) {
   ].join("\n");
 }
 
+export type CuratorshipLead = {
+  name: string;
+  phone: string;
+  profile: string;
+  bodyType: string;
+  budget: string;
+  priority: string;
+  moment: string;
+  hasTrade: "Sim" | "Não";
+  tradeVehicle?: string;
+  suggestedModels: string[];
+};
+
+export function buildCuratorshipMessage(lead: CuratorshipLead) {
+  const tradeVehicle = lead.tradeVehicle?.trim();
+
+  return [
+    "Olá Breno, fiz minha curadoria pelo site da Breno Automix.",
+    "",
+    `Nome: ${lead.name}`,
+    `WhatsApp: ${lead.phone}`,
+    "",
+    `Perfil: ${lead.profile}`,
+    `Tipo de veículo: ${lead.bodyType}`,
+    `Faixa de investimento: ${lead.budget}`,
+    `Prioridade: ${lead.priority}`,
+    `Momento de compra: ${lead.moment}`,
+    "",
+    `Possui veículo na troca: ${lead.hasTrade}`,
+    lead.hasTrade === "Sim"
+      ? `Veículo atual: ${tradeVehicle || "Informar na conversa"}`
+      : null,
+    "",
+    "Modelos sugeridos pelo site:",
+    ...lead.suggestedModels.map((model, index) => `${index + 1}. ${model}`),
+    "",
+    "Gostaria de conversar sobre as opções mais alinhadas ao meu perfil.",
+  ]
+    .filter((line): line is string => line !== null)
+    .join("\n");
+}
+
 export function buildVehicleInterestMessage(brand: string, model: string) {
   return [
     "Olá Breno.",

@@ -1,10 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { BackToHomeButton } from "./BackToHomeButton";
 import { buildVipMessage, buildWhatsappUrl } from "@/lib/whatsapp";
 import { AnimatedSection } from "./AnimatedSection";
 import { PremiumImage } from "./PremiumImage";
+import { SplitText } from "./motion-primitives";
 
 const profiles = [
   "Executivo Discreto",
@@ -62,29 +62,35 @@ export function VipLeadForm() {
   return (
     <AnimatedSection
       id="lista-vip"
-      className="relative isolate overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-red-950/40 px-5 py-16 md:px-8 md:py-24"
+      className="relative isolate overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-red-950/40 px-5 py-14 md:px-8 lg:py-20"
     >
       <PremiumImage src="/images/interiorland.webp" alt="Ambiente executivo premium" fill sizes="100vw" className="premium-section-image -z-20 object-cover" />
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(105deg,rgba(5,5,7,.97),rgba(7,7,9,.9),rgba(46,12,15,.78))]" />
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
         <div>
           <p className="inline-flex border border-red-500/30 bg-red-950/20 px-3 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-red-300 backdrop-blur">
-            Acesso VIP
+            Lista VIP
           </p>
-          <h2 className="mt-4 text-2xl font-semibold text-white md:text-4xl">
-            Acesso antecipado a oportunidades premium
-          </h2>
+          <SplitText
+            as="h2"
+            text="Receba oportunidades alinhadas ao seu perfil."
+            className="mt-4 text-2xl font-semibold text-white md:text-4xl"
+          />
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
-            Algumas oportunidades chegam ao estoque e são negociadas
-            rapidamente.
-          </p>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
-            Ao participar da Lista VIP, você passa a receber avisos sobre
-            veiculos alinhados ao seu perfil antes de grande parte do mercado.
+            Algumas oportunidades não ficam disponíveis por muito tempo. A Lista
+            VIP ajuda Breno a avisar primeiro quem já sabe o que procura.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="premium-panel p-5 md:p-6">
+        <form onSubmit={handleSubmit} className="premium-panel rounded-sm p-5 md:p-6">
+          <div className="mb-5 border-b border-white/10 pb-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
+              Solicitação de acesso
+            </p>
+            <p className="mt-2 text-sm leading-6 text-zinc-400">
+              Informe o perfil desejado.
+            </p>
+          </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <label>
               <span className="text-xs uppercase tracking-[0.18em] text-zinc-500">
@@ -93,7 +99,7 @@ export function VipLeadForm() {
               <input
                 value={name}
                 onChange={(event) => setName(event.target.value)}
-                className="mt-2 h-12 w-full border border-white/10 bg-black/35 px-4 text-sm text-white placeholder:text-zinc-600"
+                className="mt-2 h-12 w-full rounded-sm border border-white/10 bg-black/35 px-4 text-sm text-white placeholder:text-zinc-600 transition focus:border-red-400/50 focus:bg-black/50"
                 placeholder="Seu nome"
               />
             </label>
@@ -104,7 +110,7 @@ export function VipLeadForm() {
               <input
                 value={phone}
                 onChange={(event) => setPhone(event.target.value)}
-                className="mt-2 h-12 w-full border border-white/10 bg-black/35 px-4 text-sm text-white placeholder:text-zinc-600"
+                className="mt-2 h-12 w-full rounded-sm border border-white/10 bg-black/35 px-4 text-sm text-white placeholder:text-zinc-600 transition focus:border-red-400/50 focus:bg-black/50"
                 inputMode="tel"
                 placeholder="(92) 99999-9999"
               />
@@ -116,7 +122,7 @@ export function VipLeadForm() {
               <select
                 value={profile}
                 onChange={(event) => setProfile(event.target.value)}
-                className="mt-2 h-12 w-full border border-white/10 bg-black/35 px-4 text-sm text-white"
+                className="mt-2 h-12 w-full rounded-sm border border-white/10 bg-black/35 px-4 text-sm text-white transition focus:border-red-400/50 focus:bg-black/50"
               >
                 {profiles.map((item) => (
                   <option key={item}>{item}</option>
@@ -130,7 +136,7 @@ export function VipLeadForm() {
               <select
                 value={budget}
                 onChange={(event) => setBudget(event.target.value)}
-                className="mt-2 h-12 w-full border border-white/10 bg-black/35 px-4 text-sm text-white"
+                className="mt-2 h-12 w-full rounded-sm border border-white/10 bg-black/35 px-4 text-sm text-white transition focus:border-red-400/50 focus:bg-black/50"
               >
                 {budgets.map((item) => (
                   <option key={item}>{item}</option>
@@ -143,9 +149,10 @@ export function VipLeadForm() {
 
           <button
             type="submit"
-            className="premium-button mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-md px-5 text-sm font-semibold text-white sm:w-auto"
+            className="premium-button cta-motion mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-5 text-sm font-semibold text-white sm:w-auto"
           >
             <span>Entrar para a Lista VIP</span>
+            <span className="cta-arrow" aria-hidden="true">↗</span>
           </button>
           <p className="mt-4 text-xs text-zinc-500">
             Sem spam. Apenas oportunidades compativeis com seu perfil.
@@ -156,17 +163,17 @@ export function VipLeadForm() {
                 Solicitação enviada para a Lista VIP.
               </p>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <BackToHomeButton />
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="premium-button inline-flex min-h-11 items-center justify-center rounded-md px-5 text-sm font-semibold text-white"
-                >
+                    className="premium-button cta-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 text-sm font-semibold text-white"
+                  >
                   <span>Falar com Breno</span>
+                  <span className="cta-arrow" aria-hidden="true">↗</span>
                 </a>
                 <a
-                  href="#configurador"
+                  href="#curadoria"
                   className="inline-flex min-h-11 items-center justify-center rounded-md border border-white/15 px-5 text-sm font-semibold text-white transition hover:border-red-500/40 hover:bg-white/[0.06]"
                 >
                   Receber Curadoria VIP

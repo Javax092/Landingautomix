@@ -12,7 +12,7 @@ export function VehicleGallery({ images, name, objectPosition = "50% 50%" }: Veh
   return (
     <div aria-label={`Galeria do ${name}`}>
       <div className="group relative aspect-[16/10] overflow-hidden border border-white/10 bg-zinc-950 shadow-[0_28px_90px_rgba(0,0,0,.45)] md:aspect-[16/9]">
-        <PremiumImage key={safeImages[active]} src={safeImages[active]} alt={`${name} — imagem ${active + 1}`} fill sizes="(max-width: 1024px) 100vw, 65vw" className="object-cover transition duration-700 group-hover:scale-[1.025]" style={{ objectPosition }} fallbackLabel={`Imagem do ${name} em atualização`} />
+        <PremiumImage key={safeImages[active]} src={safeImages[active]} alt={`${name} — imagem ${active + 1}`} fill sizes="(max-width: 1024px) 100vw, 65vw" className="object-cover transition duration-700 group-hover:scale-[1.015]" style={{ objectPosition }} fallbackLabel={`Imagem do ${name} em atualização`} />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
         <p className="absolute bottom-4 right-4 border border-white/15 bg-black/45 px-3 py-2 text-[0.62rem] uppercase tracking-[0.2em] text-zinc-300 backdrop-blur">{String(active + 1).padStart(2, "0")} / {String(safeImages.length).padStart(2, "0")}</p>
       </div>

@@ -1,1 +1,0 @@
-export { VehicleCatalog } from "./VehicleCatalog";

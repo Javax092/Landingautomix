@@ -4,6 +4,7 @@ import { BackToHomeButton } from "./BackToHomeButton";
 import { buildVehicleInterestMessage, buildWhatsappUrl } from "@/lib/whatsapp";
 import type { Vehicle } from "@/lib/vehicles";
 import { VehicleGallery } from "./VehicleGallery";
+import { AnimatedContent, Magnet, SplitText } from "./motion-primitives";
 
 type VehicleDetailProps = {
   vehicle: Vehicle;
@@ -16,85 +17,126 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
   const gallery = vehicle.gallery?.length ? vehicle.gallery : [vehicle.image];
 
   const specs = [
-    ["Ano", vehicle.year ?? "Confirmar com consultor"],
-    ["Cor", vehicle.color ?? "Confirmar com consultor"],
-    ["Quilometragem", vehicle.mileage ?? "Confirmar com consultor"],
-    ["Motorizacao", vehicle.engine ?? "Confirmar com consultor"],
-    ["Categoria", vehicle.category],
-    ["Perfil Ideal", vehicle.idealProfile],
-  ];
-
-  const commercialSpecs = [
-    ["Condicao comercial", "Disponivel mediante consulta"],
-    ["Disponibilidade", "Confirmar com consultor"],
-    ["Troca", "Aceitamos avaliacao do seu usado"],
+    ["Ano", vehicle.year ?? "Confirmar"],
+    ["KM", vehicle.mileage ?? "Confirmar"],
+    ["Cor", vehicle.color ?? "Confirmar"],
+    ["Motor", vehicle.engine ?? "Confirmar"],
+    ["Perfil", vehicle.idealProfile],
+    ["Troca", "Avaliação do usado"],
   ];
 
   return (
-    <main className="bg-[#050505]">
-      <section className="relative min-h-[82svh] overflow-hidden pt-24">
+    <main className="bg-[#050505] pb-20 md:pb-0">
+      <section className="relative min-h-[86svh] overflow-hidden pt-20">
         <Image
           src={vehicle.image}
           alt={`${vehicle.brand} ${vehicle.model}`}
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-75"
+          className="object-cover vehicle-detail-hero-image"
           style={{ objectPosition: vehicle.imagePosition ?? "50% 50%" }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.96)_0%,rgba(5,5,5,0.66)_48%,rgba(69,10,10,0.18)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.88)_0%,rgba(5,5,5,0.52)_38%,rgba(5,5,5,0.08)_72%,rgba(5,5,5,0.12)_100%)]" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#050505] to-transparent" />
 
-        <div className="relative mx-auto flex min-h-[calc(82svh-6rem)] max-w-7xl items-end px-5 pb-16 md:px-8">
-          <div className="max-w-3xl">
+        <div className="relative mx-auto flex min-h-[calc(86svh-5rem)] max-w-7xl items-end px-5 pb-14 md:px-8">
+          <AnimatedContent className="max-w-3xl" distance={18}>
             <div className="flex flex-wrap items-center gap-3">
               <BackToHomeButton className="min-h-10 px-4 text-xs uppercase tracking-[0.18em]" />
               <Link
-                href="/#estoque"
+                href="/veiculos"
                 className="inline-flex min-h-10 items-center justify-center rounded-md border border-white/15 px-4 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:border-red-500/40 hover:bg-white/[0.06]"
               >
                 Ver outros veículos
               </Link>
             </div>
-            <p className="mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-red-400">
-              {vehicle.profile}
+            <SplitText
+              as="p"
+              text={vehicle.brand}
+              className="mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-red-400"
+            />
+            <SplitText
+              as="h1"
+              text={vehicle.model}
+              className="mt-4 text-3xl font-semibold leading-tight text-white md:text-5xl"
+            />
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-zinc-300 md:text-base">
+              {vehicle.year ? <span>{vehicle.year}</span> : null}
+              {vehicle.mileage ? <span>· {vehicle.mileage}</span> : null}
+              {vehicle.price ? (
+                <span className="font-semibold text-white">· {vehicle.price}</span>
+              ) : null}
+            </div>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Magnet>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="premium-button cta-motion inline-flex min-h-12 items-center justify-center gap-2 rounded-sm px-6 text-sm font-semibold text-white"
+                >
+                  <span>Tenho interesse</span>
+                  <span className="cta-arrow" aria-hidden="true">↗</span>
+                </a>
+              </Magnet>
+            </div>
+          </AnimatedContent>
+        </div>
+      </section>
+
+      <section className="px-5 py-12 md:px-8 lg:py-16">
+        <AnimatedContent className="mx-auto max-w-7xl" scale>
+          <VehicleGallery
+            images={gallery}
+            name={`${vehicle.brand} ${vehicle.model}`}
+            objectPosition={vehicle.imagePosition}
+          />
+        </AnimatedContent>
+      </section>
+
+      <section className="px-5 pb-16 md:px-8 lg:pb-24">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+          <AnimatedContent as="aside" className="lg:sticky lg:top-24 lg:self-start">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-red-400">
+              Informações essenciais
             </p>
-            <h1 className="mt-4 text-3xl font-semibold leading-tight text-white md:text-5xl">
+            <h2 className="mt-4 text-2xl font-semibold text-white md:text-4xl">
               {vehicle.brand} {vehicle.model}
-            </h1>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-zinc-300 md:text-base">
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-zinc-300">
               {vehicle.recommendation}
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <dl className="mt-6 grid gap-3 sm:grid-cols-2">
+              {specs.map(([label, value]) => (
+                <div
+                  key={label}
+                  className="min-h-20 border border-white/10 bg-white/[0.035] p-4"
+                >
+                  <dt className="text-[0.68rem] uppercase tracking-[0.18em] text-zinc-500">
+                    {label}
+                  </dt>
+                  <dd className="mt-2 text-sm font-semibold leading-5 text-zinc-100">
+                    {value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <Magnet>
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="premium-button inline-flex min-h-12 items-center justify-center rounded-md px-6 text-sm font-semibold text-white"
+                className="premium-button cta-motion mt-6 hidden min-h-12 w-full items-center justify-center gap-2 rounded-sm px-5 text-sm font-semibold text-white md:inline-flex"
               >
-                <span>Solicitar Consultoria Personalizada</span>
+                <span>Tenho interesse</span>
+                <span className="cta-arrow" aria-hidden="true">↗</span>
               </a>
-              <Link
-                href="/#lista-vip"
-                className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/15 px-6 text-sm font-semibold text-white transition hover:border-red-500/40 hover:bg-white/[0.06]"
-              >
-                Quer algo parecido?
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+            </Magnet>
+          </AnimatedContent>
 
-      <section className="px-5 py-16 md:px-8 md:py-24">
-        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-red-400">
-              Destaques
-            </p>
-            <h2 className="mt-4 text-2xl font-semibold text-white md:text-4xl">
-              Posicionamento do modelo
-            </h2>
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          <AnimatedContent delay={120}>
+            <div className="grid gap-3 sm:grid-cols-3">
               {vehicle.highlights.map((highlight) => (
                 <div
                   key={highlight}
@@ -108,87 +150,26 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
               ))}
             </div>
 
-            <div className="mt-8">
-              <VehicleGallery images={gallery} name={`${vehicle.brand} ${vehicle.model}`} objectPosition={vehicle.imagePosition} />
-            </div>
-
-            <div className="mt-10 border-l border-red-500/50 bg-white/[0.025] p-6 md:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-red-400">
-                Sobre este modelo
+            <div className="mt-8 border-l border-red-500/50 bg-white/[0.025] p-6 md:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500">
+                Curadoria Breno
               </p>
-              <div className="mt-4 space-y-4 text-sm leading-7 text-zinc-300 md:text-base">
+              <p className="mt-3 text-sm leading-6 text-zinc-300">
+                Antes da decisão, Breno confirma disponibilidade, histórico,
+                condições comerciais e possibilidade de troca.
+              </p>
+              <div className="mt-5 space-y-4 text-sm leading-7 text-zinc-300 md:text-base">
                 {vehicle.about.split("\n\n").map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
             </div>
-          </div>
-
-          <aside className="border border-red-500/20 bg-white/[0.035] p-5 shadow-premium backdrop-blur md:p-6 lg:sticky lg:top-24 lg:self-start">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-red-400">
-              Especificacoes Selecionadas
-            </p>
-            <dl className="mt-5 grid gap-3 sm:grid-cols-2">
-              {specs.map(([label, value]) => (
-                <div
-                  key={label}
-                  className="min-h-24 border border-white/10 bg-black/20 p-4"
-                >
-                  <dt className="text-[0.68rem] uppercase tracking-[0.18em] text-zinc-500">
-                    {label}
-                  </dt>
-                  <dd className="mt-3 text-sm font-semibold leading-5 text-zinc-100">
-                    {value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-
-            <dl className="mt-5 grid gap-3">
-              {commercialSpecs.map(([label, value]) => (
-                <div
-                  key={label}
-                  className="flex items-center justify-between gap-4 border-b border-white/10 pb-4 last:border-b-0"
-                >
-                  <dt className="text-xs uppercase tracking-[0.18em] text-zinc-500">
-                    {label}
-                  </dt>
-                  <dd className="text-right text-sm font-medium text-zinc-200">
-                    {value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-
-            <div className="mt-6 border border-white/10 bg-black/25 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500">
-                Consultoria Breno Automix
-              </p>
-              <p className="mt-3 text-sm leading-6 text-zinc-300">
-                Antes de qualquer decisao, recomendo confirmar disponibilidade,
-                historico, condicoes comerciais e possibilidades de troca.
-              </p>
-              <p className="mt-3 text-sm leading-6 text-zinc-300">
-                Meu objetivo e ajudar voce a encontrar a opcao mais alinhada ao
-                seu perfil, mesmo que o veiculo inicialmente desejado ja nao
-                esteja disponivel.
-              </p>
-            </div>
-
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="premium-button mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-md px-5 text-sm font-semibold text-white"
-            >
-              <span>Solicitar Consultoria Personalizada</span>
-            </a>
-          </aside>
+          </AnimatedContent>
         </div>
       </section>
 
-      <section className="bg-gradient-to-br from-black via-zinc-950 to-red-950/40 px-5 py-16 md:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 md:flex-row md:items-center">
+      <section className="bg-gradient-to-br from-black via-zinc-950 to-red-950/40 px-5 py-12 md:px-8">
+        <AnimatedContent className="mx-auto flex max-w-7xl flex-col justify-between gap-5 md:flex-row md:items-center">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-red-400">
               Lista VIP
@@ -199,13 +180,30 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
           </div>
           <Link
             href="/#lista-vip"
-            className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/15 px-6 text-sm font-semibold text-white transition hover:border-red-500/40 hover:bg-white/[0.06]"
+            className="cta-motion inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-white/15 px-6 text-sm font-semibold text-white transition hover:border-red-500/40 hover:bg-white/[0.06]"
           >
-            Entrar na Lista VIP
+            <span>Entrar na Lista VIP</span>
+            <span className="cta-arrow" aria-hidden="true">→</span>
           </Link>
           <BackToHomeButton className="md:ml-0" />
-        </div>
+        </AnimatedContent>
       </section>
+
+      <div className="fixed inset-x-3 bottom-3 z-40 rounded-sm border border-white/10 bg-black/85 p-2 shadow-[0_20px_56px_rgba(0,0,0,0.42)] backdrop-blur-xl md:hidden">
+        <div className="grid grid-cols-[1fr_auto] items-center gap-3">
+          <p className="min-w-0 truncate px-2 text-sm font-semibold text-white">
+            {vehicle.brand} {vehicle.model}
+          </p>
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="premium-button inline-flex min-h-11 items-center justify-center rounded-sm px-4 text-sm font-semibold text-white"
+          >
+            Tenho interesse
+          </a>
+        </div>
+      </div>
     </main>
   );
 }

@@ -1,856 +1,679 @@
 "use client";
 
-import Image from "next/image";
+import Link from "next/link";
+import type { CSSProperties, InputHTMLAttributes, ReactNode } from "react";
 import { useMemo, useRef, useState } from "react";
-import { BackToHomeButton } from "./BackToHomeButton";
-import { buildConciergeMessage, buildWhatsappUrl } from "@/lib/whatsapp";
+import {
+  buildCuratorshipMessage,
+  buildWhatsappUrl,
+} from "@/lib/whatsapp";
+import { vehicles, type Vehicle } from "@/lib/vehicles";
 import { AnimatedSection } from "./AnimatedSection";
 import { PremiumImage } from "./PremiumImage";
+import { SplitText } from "./motion-primitives";
 
 const profiles = [
   {
     title: "Executivo Discreto",
-    text: "Presença sem excesso. Conforto, tecnologia e elegância no dia a dia.",
-    mark: "ED",
+    text: "Conforto, tecnologia e presença sem excesso.",
   },
   {
     title: "Performance & Status",
-    text: "Design forte, motor marcante e imagem a altura da sua conquista.",
-    mark: "PS",
+    text: "Potência, design e experiência ao dirigir.",
   },
   {
-    title: "Familia Premium",
-    text: "Espaço, segurança e conforto para uma rotina mais elevada.",
-    mark: "FP",
+    title: "Família Premium",
+    text: "Espaço, segurança e conforto para a rotina.",
   },
   {
     title: "Aventura Sofisticada",
-    text: "Força, imponencia e liberdade para ir alem da cidade.",
-    mark: "AS",
+    text: "Versatilidade, força e liberdade com acabamento premium.",
   },
-];
+] as const;
 
-type ProfileMark = (typeof profiles)[number]["mark"];
-
-const profileRecommendations: Record<
-  ProfileMark,
-  {
-    description: string;
-    priceRange: string;
-    priority: string;
-    vehicles: {
-      brand: string;
-      model: string;
-      year: string;
-      price?: string;
-      tags: string[];
-      image?: {
-        src: string;
-        alt: string;
-        objectPosition?: string;
-      };
-      curatorNote?: string;
-    }[];
-  }
-> = {
-  ED: {
-    description:
-      "Elegancia sem exageros. Conforto, tecnologia e imagem profissional.",
-    priceRange: "R$150 mil a R$350 mil",
-    priority: "Conforto e imagem profissional",
-    vehicles: [
-      {
-        brand: "Mercedes-Benz",
-        model: "C200 AMG",
-        year: "2024",
-        tags: ["Imagem profissional", "Tecnologia alema", "Elegancia"],
-        image: {
-          src: "/images/mercedez3.webp",
-          alt: "Mercedes-Benz C200 AMG em curadoria premium",
-        },
-        curatorNote:
-          "A escolha mais alinhada para presenca executiva sem excesso.",
-      },
-      {
-        brand: "Volvo",
-        model: "S60 Inscription",
-        year: "2019/2020",
-        tags: ["Conforto escandinavo", "Elegancia discreta", "Sedan premium"],
-        image: {
-          src: "/images/s60inscription.webp",
-          alt: "Volvo S60 Inscription em curadoria premium",
-        },
-        curatorNote: "Para quem valoriza conforto, seguranca e discricao.",
-      },
-      {
-        brand: "Toyota",
-        model: "Corolla Altis",
-        year: "2021/2022",
-        tags: ["Confiabilidade", "Sofisticacao discreta", "Baixo risco"],
-      },
-      {
-        brand: "Mercedes-Benz",
-        model: "GLC 300",
-        year: "2025/2026",
-        tags: ["SUV executivo", "Alto padrao", "Conforto premium"],
-      },
-    ],
-  },
-  PS: {
-    description:
-      "Para quem gosta de acelerar, impressionar e celebrar conquistas.",
-    priceRange: "R$300 mil+",
-    priority: "Performance e exclusividade",
-    vehicles: [
-      {
-        brand: "BMW",
-        model: "M3 Competition",
-        year: "2022",
-        tags: ["Alta performance", "Motorsport", "Status"],
-        image: {
-          src: "/images/bmw4.webp",
-          alt: "BMW em destaque na curadoria de performance",
-        },
-        curatorNote:
-          "Entrega impacto, dirigibilidade e assinatura esportiva premium.",
-      },
-      {
-        brand: "Chevrolet",
-        model: "Corvette V8",
-        year: "2024/2025",
-        tags: ["Icone americano", "V8", "Exclusividade"],
-        image: {
-          src: "/images/corvete.webp",
-          alt: "Chevrolet Corvette V8 em curadoria de performance",
-        },
-        curatorNote: "Uma recomendacao para quem busca algo raro e memoravel.",
-      },
-      {
-        brand: "Mercedes-AMG",
-        model: "CLA 35",
-        year: "2024/2025",
-        tags: ["AMG", "Esportivo premium", "Uso diario"],
-      },
-      {
-        brand: "Porsche",
-        model: "Panamera S",
-        year: "2013/2014",
-        tags: ["Luxo", "Performance", "Presenca"],
-      },
-    ],
-  },
-  FP: {
-    description:
-      "Espaco, seguranca, conforto e tecnologia para quem transporta o que realmente importa.",
-    priceRange: "R$150 mil a R$250 mil",
-    priority: "Procedencia",
-    vehicles: [
-      {
-        brand: "Toyota",
-        model: "SW4 Platinum",
-        year: "2025/2026",
-        tags: ["7 lugares", "Seguranca Toyota", "Viagens em familia"],
-        image: {
-          src: "/images/sw4.webp",
-          alt: "Toyota SW4 em curadoria familiar premium",
-          objectPosition: "50% 44%",
-        },
-        curatorNote: "Prioriza conforto familiar, robustez e liquidez.",
-      },
-      {
-        brand: "Volvo",
-        model: "XC60 T8",
-        year: "2025/2026",
-        tags: ["SUV premium", "Hibrido", "Conforto executivo"],
-        image: {
-          src: "/images/xc60.webp",
-          alt: "Volvo XC60 T8 em curadoria familiar premium",
-        },
-        curatorNote:
-          "Um SUV para familia com pegada mais tecnologica e refinada.",
-      },
-      {
-        brand: "Jeep",
-        model: "Commander Overland TD",
-        year: "2024/2025",
-        tags: ["SUV familiar", "Espacoso", "Custo-beneficio premium"],
-      },
-      {
-        brand: "Toyota",
-        model: "SW4 Diamond",
-        year: "2026",
-        tags: ["Topo de linha", "Robustez", "Presenca"],
-      },
-    ],
-  },
-  AS: {
-    description: "Robustez, imponencia e liberdade para qualquer destino.",
-    priceRange: "R$220 mil a R$500 mil+",
-    priority: "Forca, altura e presenca",
-    vehicles: [
-      {
-        brand: "RAM",
-        model: "1500 Laramie Night Edition",
-        year: "2025",
-        tags: ["Presenca absoluta", "Luxo", "Forca"],
-        image: {
-          src: "/images/ram150.webp",
-          alt: "RAM 1500 Laramie Night Edition em destaque",
-          objectPosition: "50% 54%",
-        },
-        curatorNote:
-          "A recomendacao para maxima presenca e conforto fora da rotina.",
-      },
-      {
-        brand: "Toyota",
-        model: "Hilux SRX Plus",
-        year: "2025/2026",
-        tags: ["Confiabilidade", "Robustez", "Pronta para tudo"],
-        image: {
-          src: "/images/hillux.webp",
-          alt: "Toyota Hilux SRX Plus em curadoria de aventura sofisticada",
-        },
-        curatorNote:
-          "Robusta, desejada e facil de defender como compra inteligente.",
-      },
-      {
-        brand: "Land Rover",
-        model: "Velar HSE",
-        year: "2023/2024",
-        tags: ["SUV premium", "Sofisticacao", "Conforto"],
-      },
-      {
-        brand: "Ford",
-        model: "Ranger Raptor",
-        year: "2026",
-        tags: ["Off-road extremo", "Tecnologia Ford", "Imponencia"],
-      },
-    ],
-  },
-};
+const bodyTypes = ["SUV", "Esportivo", "Pickup", "Ainda não decidi"] as const;
 
 const budgets = [
-  "R$150 mil a R$250 mil",
-  "R$250 mil a R$400 mil",
-  "Acima de R$400 mil",
+  "Até R$ 150 mil",
+  "R$ 150 mil a R$ 250 mil",
+  "R$ 250 mil a R$ 400 mil",
+  "Acima de R$ 400 mil",
   "Prefiro conversar",
-];
+] as const;
 
 const priorities = [
-  "Procedencia",
-  "Baixa quilometragem",
+  "Procedência",
+  "Conforto",
   "Performance",
-  "Conforto interno",
-  "Presenca",
-  "Revenda futura",
-  "Aceitar usado na troca",
-];
+  "Tecnologia",
+  "Espaço",
+  "Exclusividade",
+  "Custo-benefício",
+] as const;
+
+const moments = [
+  "Agora",
+  "Nos próximos 30 dias",
+  "Entre 1 e 3 meses",
+  "Ainda estou pesquisando",
+] as const;
+
+const steps = [
+  "Perfil",
+  "Veículo",
+  "Investimento",
+  "Momento",
+  "Troca",
+  "Resultado",
+] as const;
+
+type ProfileTitle = (typeof profiles)[number]["title"];
+type BodyType = (typeof bodyTypes)[number];
+type Budget = (typeof budgets)[number];
+type Priority = (typeof priorities)[number];
+type Moment = (typeof moments)[number];
+
+const profileAliases: Record<ProfileTitle, string[]> = {
+  "Executivo Discreto": ["Executivo Discreto", "Conforto interno"],
+  "Performance & Status": [
+    "Performance & Status",
+    "Prazer ao dirigir",
+    "Presenca",
+  ],
+  "Família Premium": ["Familia Premium", "Família Premium"],
+  "Aventura Sofisticada": [
+    "Aventura Sofisticada",
+    "Forca com personalidade",
+    "Presenca",
+  ],
+};
+
+function getBodyType(vehicle: Vehicle): Exclude<BodyType, "Ainda não decidi"> | "Outro" {
+  const category = vehicle.category.toLowerCase();
+  if (category.includes("suv")) return "SUV";
+  if (category.includes("esportivo")) return "Esportivo";
+  if (category.includes("picape") || category.includes("pickup")) return "Pickup";
+  return "Outro";
+}
+
+function scoreVehicle(
+  vehicle: Vehicle,
+  answers: {
+    profile: ProfileTitle;
+    bodyType: BodyType;
+    budget: Budget;
+    priority: Priority;
+  },
+) {
+  let score = 0;
+  const aliases = profileAliases[answers.profile];
+  const searchable = [
+    vehicle.profile,
+    vehicle.idealProfile,
+    vehicle.category,
+    vehicle.recommendation,
+    ...vehicle.recommendedFor,
+    ...vehicle.highlights,
+    ...vehicle.matchProfiles,
+  ].join(" ");
+
+  if (aliases.some((alias) => searchable.includes(alias))) score += 4;
+  if (answers.bodyType !== "Ainda não decidi" && getBodyType(vehicle) === answers.bodyType) {
+    score += 5;
+  }
+  if (answers.bodyType === "Ainda não decidi") score += 1;
+
+  if (answers.priority === "Performance" && /performance|esportivo|experiencia/i.test(searchable)) score += 3;
+  if (answers.priority === "Conforto" && /conforto|cabine|premium|elegancia/i.test(searchable)) score += 3;
+  if (answers.priority === "Tecnologia" && /tecnologia|digital|premium|compacta/i.test(searchable)) score += 2;
+  if (answers.priority === "Espaço" && /familia|cabine|suv|picape|pickup/i.test(searchable)) score += 2;
+  if (answers.priority === "Exclusividade" && /competition|porsche|fora do obvio|presenca/i.test(searchable)) score += 2;
+  if (answers.priority === "Procedência" && /breno|selecao|seleção|premium|discreta/i.test(searchable)) score += 1;
+  if (answers.priority === "Custo-benefício" && /compacta|equilibrio|uso misto|praticidade/i.test(searchable)) score += 2;
+
+  if (answers.budget === "Até R$ 150 mil" && vehicle.slug === "dakota") score += 2;
+  if (answers.budget === "R$ 150 mil a R$ 250 mil" && vehicle.slug === "mercedes-gla-200") score += 2;
+  if (answers.budget === "R$ 250 mil a R$ 400 mil" && ["ram-1500", "porsche-718"].includes(vehicle.slug)) score += 2;
+  if (answers.budget === "Acima de R$ 400 mil" && vehicle.slug === "bmw-x6-competition") score += 2;
+
+  return score;
+}
+
+function getRecommendations(answers: {
+  profile: ProfileTitle;
+  bodyType: BodyType;
+  budget: Budget;
+  priority: Priority;
+}) {
+  return [...vehicles]
+    .map((vehicle) => ({
+      vehicle,
+      score: scoreVehicle(vehicle, answers),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .map((item) => item.vehicle);
+}
 
 export function ConciergeConfigurator() {
+  const [isStarted, setIsStarted] = useState(false);
   const [step, setStep] = useState(0);
-  const [profile, setProfile] = useState(profiles[0].title);
-  const [budget, setBudget] = useState(budgets[0]);
-  const [priority, setPriority] = useState(priorities[0]);
+  const [profile, setProfile] = useState<ProfileTitle>("Executivo Discreto");
+  const [bodyType, setBodyType] = useState<BodyType>("SUV");
+  const [budget, setBudget] = useState<Budget>("R$ 250 mil a R$ 400 mil");
+  const [priority, setPriority] = useState<Priority>("Procedência");
+  const [moment, setMoment] = useState<Moment>("Nos próximos 30 dias");
+  const [hasTrade, setHasTrade] = useState<"Sim" | "Não">("Não");
+  const [tradeBrand, setTradeBrand] = useState("");
+  const [tradeModel, setTradeModel] = useState("");
+  const [tradeYear, setTradeYear] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const recommendationRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-  const completionRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
-  const whatsappUrl = useMemo(() => {
-    return buildWhatsappUrl(
-      buildConciergeMessage({
-        name: name.trim() || "[nome]",
-        phone: phone.trim() || "[whatsapp]",
-        profile,
-        budget,
-        priority,
-      }),
-    );
-  }, [budget, name, phone, priority, profile]);
+  const recommendations = useMemo(
+    () => getRecommendations({ profile, bodyType, budget, priority }),
+    [bodyType, budget, priority, profile],
+  );
+  const mainRecommendations = recommendations.slice(0, 2);
+  const alternatives = recommendations.slice(2, 5);
+  const isApproximate =
+    bodyType !== "Ainda não decidi" &&
+    mainRecommendations.every((vehicle) => getBodyType(vehicle) !== bodyType);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const whatsappUrl = useMemo(
+    () =>
+      buildWhatsappUrl(
+        buildCuratorshipMessage({
+          name: name.trim() || "[nome]",
+          phone: phone.trim() || "[whatsapp]",
+          profile,
+          bodyType,
+          budget,
+          priority,
+          moment,
+          hasTrade,
+          tradeVehicle:
+            hasTrade === "Sim"
+              ? [tradeBrand, tradeModel, tradeYear].filter(Boolean).join(" ")
+              : "",
+          suggestedModels: mainRecommendations.map(
+            (vehicle) => `${vehicle.brand} ${vehicle.model}`,
+          ),
+        }),
+      ),
+    [
+      bodyType,
+      budget,
+      hasTrade,
+      mainRecommendations,
+      moment,
+      name,
+      phone,
+      priority,
+      profile,
+      tradeBrand,
+      tradeModel,
+      tradeYear,
+    ],
+  );
 
-    const digits = phone.replace(/\D/g, "");
+  function maybeScrollPanel() {
+    window.setTimeout(() => {
+      const panel = panelRef.current;
+      if (!panel) return;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const rect = panel.getBoundingClientRect();
+      const outsideView = rect.top < 76 || rect.bottom > window.innerHeight + 80;
+      if (outsideView) {
+        panel.scrollIntoView({
+          behavior: reducedMotion ? "auto" : "smooth",
+          block: "start",
+        });
+      }
+    }, 80);
+  }
+
+  function startCuratorship() {
+    setIsStarted(true);
+    maybeScrollPanel();
+  }
+
+  function goToStep(nextStep: number) {
+    setError("");
+    setStep(Math.max(0, Math.min(steps.length - 1, nextStep)));
+    maybeScrollPanel();
+  }
+
+  function openWhatsapp() {
     if (!name.trim()) {
       setError("Informe seu nome para Breno identificar sua curadoria.");
       return;
     }
-
-    if (digits.length < 10) {
-      setError("Informe um WhatsApp valido com DDD.");
+    if (phone.replace(/\D/g, "").length < 10) {
+      setError("Informe um WhatsApp válido com DDD.");
       return;
     }
-
     setError("");
-    setSubmitted(true);
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-    window.setTimeout(() => {
-      completionRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }, 120);
   }
 
-  function scrollToForm() {
-    window.setTimeout(() => {
-      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 60);
-  }
-
-  function handleProfileSelect(nextProfile: string) {
-    setProfile(nextProfile);
-    window.setTimeout(() => {
-      recommendationRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }, 80);
-  }
-
-  function handleNextStep() {
-    setStep((current) => Math.min(3, current + 1));
-    scrollToForm();
-  }
-
-  function handlePreviousStep() {
-    setStep((current) => Math.max(0, current - 1));
-    scrollToForm();
-  }
-
-  function handleResetMatch() {
-    setStep(0);
-    setProfile(profiles[0].title);
-    setBudget(budgets[0]);
-    setPriority(priorities[0]);
-    setSubmitted(false);
-    setError("");
-    scrollToForm();
-  }
-
-  const progress = ((step + 1) / 4) * 100;
-  const selectedProfile =
-    profiles.find((item) => item.title === profile) ?? profiles[0];
-  const selectedRecommendations =
-    profileRecommendations[selectedProfile.mark as ProfileMark];
-  const highlightedVehicles = selectedRecommendations.vehicles.slice(0, 2);
-  const alternativeVehicles = selectedRecommendations.vehicles.slice(2);
-  const summaries = [
-    { label: "Perfil", value: profile },
-    { label: "Faixa", value: budget },
-    { label: "Prioridade", value: priority },
+  const summary = [
+    ["Perfil", profile],
+    ["Tipo de veículo", bodyType],
+    ["Investimento", budget],
+    ["Prioridade", priority],
+    ["Momento", moment],
+    ["Possui troca", hasTrade],
   ];
 
   return (
     <AnimatedSection
-      id="configurador"
-      className="section-band px-5 py-12 md:px-8 md:py-16"
+      id="curadoria"
+      className="section-band px-5 py-16 md:px-8 lg:py-24"
     >
-      <PremiumImage src="/images/x6interior.webp" alt="Interior premium com volante e painel digital" fill sizes="100vw" className="premium-section-image -z-20 object-cover" />
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(110deg,rgba(5,5,7,.97),rgba(7,7,9,.87),rgba(34,10,12,.75))]" />
+      <span id="configurador" className="absolute top-0" aria-hidden="true" />
+      <PremiumImage
+        src="/images/x6interior.webp"
+        alt="Interior premium com volante e painel digital"
+        fill
+        sizes="100vw"
+        className="premium-section-image -z-20 object-cover"
+      />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(110deg,rgba(5,5,7,.95),rgba(7,7,9,.84),rgba(34,10,12,.68))]" />
+
       <div className="mx-auto max-w-5xl">
-        <div className="mx-auto mb-8 max-w-3xl text-center">
+        <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-red-400">
-            Concierge automotivo
+            Curadoria
           </p>
-          <h2 className="mt-4 text-2xl font-semibold text-white md:text-4xl">
-            Inicie sua curadoria personalizada em menos de 1 minuto.
-          </h2>
+          <SplitText
+            as="h2"
+            text="Encontre o veículo certo para o seu momento."
+            className="mx-auto mt-4 justify-center text-2xl font-semibold text-white md:text-4xl"
+          />
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-zinc-400 md:text-base">
-            Compartilhe suas preferencias e receba uma pre-selecao construida a
-            partir do seu perfil, momento e objetivo de compra.
+            Responda algumas perguntas e receba uma seleção mais alinhada ao seu perfil.
           </p>
+          {!isStarted ? (
+            <button
+              type="button"
+              onClick={startCuratorship}
+              className="premium-button cta-motion mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-sm px-7 text-sm font-semibold text-white"
+            >
+              <span>Encontrar meu próximo carro</span>
+              <span className="cta-arrow" aria-hidden="true">→</span>
+            </button>
+          ) : null}
         </div>
 
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className="premium-panel mx-auto max-w-4xl p-4 md:p-6"
-        >
-          <div className="flex flex-col gap-4 border-b border-white/10 pb-5 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-red-300">
-                {step + 1} de 4
-              </p>
-              <div className="mt-3 h-1.5 w-48 overflow-hidden bg-white/10">
-                <div
-                  className="h-full bg-gradient-to-r from-red-900 via-red-500 to-red-300 transition-all duration-500"
-                  style={{ width: `${progress}%` }}
-                />
+        {isStarted ? (
+          <div ref={panelRef} className="premium-panel mx-auto mt-8 max-w-4xl rounded-sm p-4 md:p-6">
+            <div className="flex flex-col gap-4 border-b border-white/10 pb-5 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-red-300">
+                  {String(step + 1).padStart(2, "0")} {steps[step]}
+                </p>
+                <p className="mt-2 text-sm text-zinc-500 md:hidden">
+                  {step + 1} de {steps.length}
+                </p>
               </div>
+              <ol className="hidden gap-2 text-[0.65rem] uppercase tracking-[0.16em] text-zinc-500 md:flex">
+                {steps.map((item, index) => (
+                  <li
+                    key={item}
+                    className={index <= step ? "text-zinc-200" : undefined}
+                  >
+                    {String(index + 1).padStart(2, "0")} {item}
+                  </li>
+                ))}
+              </ol>
             </div>
-            <div className="grid gap-2 text-xs text-zinc-500 sm:grid-cols-3 md:min-w-[440px]">
-              {summaries.map((item, index) => (
-                <div
-                  key={item.label}
-                  className={`border px-3 py-2 ${
-                    index < step
-                      ? "border-white/12 bg-black/25 text-zinc-300"
-                      : "border-white/10 bg-black/10"
-                  }`}
-                >
-                  <span className="block uppercase tracking-[0.18em]">
-                    {item.label}
-                  </span>
-                  <span className="mt-1 block truncate text-white/80">
-                    {item.value}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          <div
-            className="concierge-step mt-5 min-h-[300px] md:min-h-[270px]"
-            key={step}
-          >
-            {step === 0 ? (
-              <fieldset>
-                <legend className="text-xs font-semibold uppercase tracking-[0.28em] text-zinc-300">
-                  Qual perfil representa sua proxima escolha?
-                </legend>
-                <div className="mt-4 grid gap-3 md:grid-cols-2">
-                  {profiles.map((item) => {
-                    const isSelected = item.title === profile;
-                    return (
-                      <button
+            <div key={step} className="concierge-step mt-6 min-h-[330px]">
+              {step === 0 ? (
+                <fieldset>
+                  <legend className="text-lg font-semibold text-white">
+                    Qual perfil representa sua próxima escolha?
+                  </legend>
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    {profiles.map((item) => (
+                      <OptionButton
                         key={item.title}
-                        type="button"
-                        onClick={() => handleProfileSelect(item.title)}
-                        className={`min-h-28 border p-4 text-left transition duration-300 hover:scale-[1.01] ${
-                          isSelected
-                            ? "border-red-500/40 bg-red-950/20"
-                            : "border-white/10 bg-black/20 hover:border-white/25 hover:bg-white/[0.035]"
-                        }`}
-                      >
-                        <span className="inline-flex h-9 w-9 items-center justify-center border border-red-500/25 text-xs font-semibold text-red-400">
-                          {item.mark}
-                        </span>
-                        <span className="mt-4 block text-base font-semibold text-white">
-                          {item.title}
-                        </span>
-                        <span className="mt-2 block text-sm leading-6 text-zinc-400">
-                          {item.text}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-                <div
-                  ref={recommendationRef}
-                  key={selectedProfile.mark}
-                  className="mt-6 border border-white/10 bg-black/25 p-4 transition duration-500 md:p-5"
-                >
-                  <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                    <div className="max-w-2xl">
-                      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-red-300">
-                        Curadoria indicada
-                      </p>
-                      <h3 className="mt-3 text-xl font-semibold text-white md:text-2xl">
-                        {selectedProfile.title}
-                      </h3>
-                      <p className="mt-2 text-sm leading-6 text-zinc-400">
-                        {selectedRecommendations.description}
-                      </p>
-                    </div>
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="premium-button inline-flex min-h-11 items-center justify-center rounded-md px-5 text-sm font-semibold text-white"
-                    >
-                      <span>Falar com Breno</span>
-                    </a>
+                        selected={profile === item.title}
+                        onClick={() => setProfile(item.title)}
+                        title={item.title}
+                        text={item.text}
+                      />
+                    ))}
                   </div>
+                </fieldset>
+              ) : null}
 
-                  <div className="mt-5 grid gap-3 md:grid-cols-3">
-                    {[
-                      {
-                        label: "Faixa de preco",
-                        value: selectedRecommendations.priceRange,
-                      },
-                      {
-                        label: "Prioridade",
-                        value: selectedRecommendations.priority,
-                      },
-                      {
-                        label: "Selecao",
-                        value: "Os 2 modelos que mais combinam com voce",
-                      },
-                    ].map((item) => (
-                      <div
-                        key={item.label}
-                        className="border border-white/10 bg-white/[0.025] px-4 py-3"
+              {step === 1 ? (
+                <div className="grid gap-7">
+                  <fieldset>
+                    <legend className="text-lg font-semibold text-white">
+                      Qual tipo de veículo você procura?
+                    </legend>
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                      {bodyTypes.map((item) => (
+                        <ChoiceButton
+                          key={item}
+                          selected={bodyType === item}
+                          onClick={() => setBodyType(item)}
+                        >
+                          {item}
+                        </ChoiceButton>
+                      ))}
+                    </div>
+                  </fieldset>
+                  <fieldset>
+                    <legend className="text-lg font-semibold text-white">
+                      O que mais pesa na sua decisão?
+                    </legend>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {priorities.map((item) => (
+                        <ChoiceButton
+                          key={item}
+                          selected={priority === item}
+                          onClick={() => setPriority(item)}
+                          compact
+                        >
+                          {item}
+                        </ChoiceButton>
+                      ))}
+                    </div>
+                  </fieldset>
+                </div>
+              ) : null}
+
+              {step === 2 ? (
+                <fieldset>
+                  <legend className="text-lg font-semibold text-white">
+                    Qual faixa de investimento você considera?
+                  </legend>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    {budgets.map((item) => (
+                      <ChoiceButton
+                        key={item}
+                        selected={budget === item}
+                        onClick={() => setBudget(item)}
                       >
-                        <span className="block text-[10px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
-                          {item.label}
-                        </span>
-                        <span className="mt-1 block text-sm font-semibold text-white">
-                          {item.value}
-                        </span>
+                        {item}
+                      </ChoiceButton>
+                    ))}
+                  </div>
+                </fieldset>
+              ) : null}
+
+              {step === 3 ? (
+                <fieldset>
+                  <legend className="text-lg font-semibold text-white">
+                    Quando pretende trocar ou comprar seu veículo?
+                  </legend>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    {moments.map((item) => (
+                      <ChoiceButton
+                        key={item}
+                        selected={moment === item}
+                        onClick={() => setMoment(item)}
+                      >
+                        {item}
+                      </ChoiceButton>
+                    ))}
+                  </div>
+                </fieldset>
+              ) : null}
+
+              {step === 4 ? (
+                <div className="grid gap-7">
+                  <fieldset>
+                    <legend className="text-lg font-semibold text-white">
+                      Possui veículo para entrar na negociação?
+                    </legend>
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                      {(["Sim", "Não"] as const).map((item) => (
+                        <ChoiceButton
+                          key={item}
+                          selected={hasTrade === item}
+                          onClick={() => setHasTrade(item)}
+                        >
+                          {item}
+                        </ChoiceButton>
+                      ))}
+                    </div>
+                  </fieldset>
+                  {hasTrade === "Sim" ? (
+                    <div className="trade-fields grid gap-3 sm:grid-cols-3">
+                      <TextInput label="Marca" value={tradeBrand} onChange={setTradeBrand} placeholder="BMW" />
+                      <TextInput label="Modelo" value={tradeModel} onChange={setTradeModel} placeholder="320i" />
+                      <TextInput label="Ano" value={tradeYear} onChange={setTradeYear} placeholder="2021" inputMode="numeric" />
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {step === 5 ? (
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-red-300">
+                    Sua curadoria está pronta.
+                  </p>
+                  <h3 className="mt-3 text-2xl font-semibold text-white md:text-3xl">
+                    Curadoria inicial para o seu perfil
+                  </h3>
+                  <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {summary.map(([label, value]) => (
+                      <div key={label} className="border border-white/10 bg-black/24 p-4">
+                        <p className="text-[0.65rem] uppercase tracking-[0.18em] text-zinc-500">
+                          {label}
+                        </p>
+                        <p className="mt-2 text-sm font-semibold text-white">{value}</p>
                       </div>
                     ))}
                   </div>
 
-                  <div className="mt-6">
-                    <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                      <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.26em] text-red-300">
-                          Curadoria exclusiva para seu perfil
-                        </p>
-                        <h4 className="mt-2 text-lg font-semibold text-white">
-                          Os 2 modelos que mais combinam com voce
-                        </h4>
-                      </div>
-                      <p className="max-w-sm text-sm leading-6 text-zinc-500">
-                        Recomendacoes priorizadas por imagem, perfil de uso e
-                        potencial de compra consultiva.
+                  <div className="mt-7">
+                    <h4 className="text-lg font-semibold text-white">
+                      Selecionamos algumas possibilidades para começar.
+                    </h4>
+                    {isApproximate ? (
+                      <p className="mt-2 text-sm leading-6 text-zinc-400">
+                        Sugestões iniciais para orientar sua conversa com Breno.
                       </p>
-                    </div>
-
+                    ) : null}
                     <div className="mt-4 grid gap-4 md:grid-cols-2">
-                      {highlightedVehicles.map((vehicle, index) => {
-                        const brandInitials = vehicle.brand
-                          .split(/\s|-/)
-                          .filter(Boolean)
-                          .map((word) => word[0])
-                          .join("")
-                          .slice(0, 3)
-                          .toUpperCase();
-
-                        return (
-                          <article
-                            key={`${selectedProfile.mark}-highlight-${vehicle.brand}-${vehicle.model}`}
-                            className="group overflow-hidden border border-white/10 bg-[#08080a] shadow-[0_24px_70px_rgba(0,0,0,0.34)] transition duration-300 hover:-translate-y-1 hover:border-red-500/35 hover:bg-white/[0.035]"
+                      {mainRecommendations.map((vehicle, index) => (
+                        <RecommendationCard key={vehicle.id} vehicle={vehicle} index={index} />
+                      ))}
+                    </div>
+                    {alternatives.length ? (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {alternatives.map((vehicle) => (
+                          <span
+                            key={vehicle.id}
+                            className="border border-white/10 bg-white/[0.025] px-3 py-2 text-xs text-zinc-300"
                           >
-                            <div className="relative min-h-[260px] overflow-hidden border-b border-white/10 bg-[linear-gradient(145deg,#17171a,#050505_58%,#260707)] md:min-h-[320px]">
-                              {vehicle.image ? (
-                                <Image
-                                  src={vehicle.image.src}
-                                  alt={vehicle.image.alt}
-                                  fill
-                                  sizes="(max-width: 768px) 100vw, 50vw"
-                                  className="object-cover transition duration-700 group-hover:scale-[1.025]"
-                                  style={{
-                                    objectPosition:
-                                      vehicle.image.objectPosition ?? "50% 50%",
-                                  }}
-                                />
-                              ) : (
-                                <div className="relative flex min-h-[260px] flex-col justify-between overflow-hidden p-5 md:min-h-[320px]">
-                                  <div className="absolute inset-0 bg-[linear-gradient(145deg,#202024,#050505_58%,#3b0a0a)]" />
-                                  <div className="absolute inset-0 opacity-[0.14] [background-image:linear-gradient(135deg,rgba(255,255,255,.14)_1px,transparent_1px)] [background-size:12px_12px]" />
-                                  <p className="relative text-5xl font-semibold uppercase tracking-[0.18em] text-white/80">
-                                    {brandInitials}
-                                  </p>
-                                  <div className="relative">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-red-300/80">
-                                      {vehicle.brand}
-                                    </p>
-                                    <p className="mt-2 text-2xl font-semibold text-white">
-                                      {vehicle.model}
-                                    </p>
-                                  </div>
-                                </div>
-                              )}
-                              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/55 to-transparent p-4">
-                                <div className="flex items-center justify-between gap-3">
-                                  <span className="border border-red-400/35 bg-red-950/50 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-red-100">
-                                    Destaque {index + 1}
-                                  </span>
-                                  <span className="border border-white/15 bg-black/45 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-zinc-200">
-                                    {vehicle.image
-                                      ? "Foto real"
-                                      : "Fallback premium"}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex min-h-72 flex-col p-5">
-                              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
-                                {vehicle.brand}
-                              </p>
-                              <h5 className="mt-2 text-2xl font-semibold leading-tight text-white">
-                                {vehicle.model}
-                              </h5>
-                              <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-                                <span>{vehicle.year}</span>
-                                {vehicle.price ? (
-                                  <>
-                                    <span className="h-1 w-1 rounded-full bg-red-400/70" />
-                                    <span className="font-semibold text-zinc-300">
-                                      {vehicle.price}
-                                    </span>
-                                  </>
-                                ) : null}
-                              </div>
-                              {vehicle.curatorNote ? (
-                                <p className="mt-4 text-sm leading-6 text-zinc-400">
-                                  {vehicle.curatorNote}
-                                </p>
-                              ) : null}
-                              <div className="mt-5 flex flex-wrap gap-2">
-                                {vehicle.tags.map((tag) => (
-                                  <span
-                                    key={tag}
-                                    className="border border-white/10 bg-white/[0.035] px-2.5 py-1 text-[11px] leading-none text-zinc-300"
-                                  >
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                              <a
-                                href={whatsappUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="premium-button mt-auto inline-flex min-h-12 items-center justify-center rounded-md px-5 text-sm font-semibold text-white"
-                              >
-                                <span>Quero analisar este modelo</span>
-                              </a>
-                            </div>
-                          </article>
-                        );
-                      })}
-                    </div>
+                            {vehicle.brand} {vehicle.model}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
                   </div>
 
-                  <div className="mt-7 border-t border-white/10 pt-5">
-                    <p className="text-sm font-semibold text-white">
-                      Outras opcoes para o seu perfil
-                    </p>
-                    <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                      {alternativeVehicles.map((vehicle) => {
-                        const brandInitials = vehicle.brand
-                          .split(/\s|-/)
-                          .filter(Boolean)
-                          .map((word) => word[0])
-                          .join("")
-                          .slice(0, 3)
-                          .toUpperCase();
-
-                        return (
-                          <article
-                            key={`${selectedProfile.mark}-alternative-${vehicle.brand}-${vehicle.model}`}
-                            className="group flex items-center gap-3 border border-white/10 bg-white/[0.025] p-3 transition hover:border-red-500/30 hover:bg-white/[0.045]"
-                          >
-                            <div className="flex h-14 w-14 shrink-0 items-center justify-center border border-white/10 bg-[linear-gradient(145deg,#17171a,#050505_58%,#260707)] text-sm font-semibold uppercase tracking-[0.12em] text-white/75">
-                              {brandInitials}
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <p className="truncate text-sm font-semibold leading-snug text-white">
-                                {vehicle.brand} {vehicle.model}
-                              </p>
-                              <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-zinc-500">
-                                <span>{vehicle.year}</span>
-                                {vehicle.price ? (
-                                  <>
-                                    <span className="h-1 w-1 rounded-full bg-red-400/70" />
-                                    <span className="font-semibold text-zinc-300">
-                                      {vehicle.price}
-                                    </span>
-                                  </>
-                                ) : null}
-                              </div>
-                            </div>
-                          </article>
-                        );
-                      })}
-                    </div>
+                  <div className="mt-7 grid gap-3 border-t border-white/10 pt-5 sm:grid-cols-2">
+                    <TextInput label="Nome" value={name} onChange={setName} placeholder="Seu nome" />
+                    <TextInput label="WhatsApp" value={phone} onChange={setPhone} placeholder="(92) 99999-9999" inputMode="tel" />
                   </div>
 
-                  <div className="mt-6 flex flex-col gap-4 border border-red-500/20 bg-red-950/10 p-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <p className="text-base font-semibold text-white">
-                        Nao encontrou o modelo ideal?
-                      </p>
-                      <p className="mt-1 text-sm leading-6 text-zinc-400">
-                        Breno pode montar uma busca personalizada com base no
-                        seu perfil e momento de compra.
-                      </p>
-                    </div>
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="premium-button inline-flex min-h-11 shrink-0 items-center justify-center rounded-md px-5 text-sm font-semibold text-white"
-                    >
-                      <span>Receber curadoria personalizada</span>
-                    </a>
-                  </div>
-                  <div className="mt-5 flex flex-col gap-3 border-t border-white/10 pt-5 sm:flex-row sm:flex-wrap">
-                    <a
-                      href="#estoque"
-                      className="inline-flex min-h-11 items-center justify-center rounded-md border border-white/15 px-5 text-sm font-semibold text-white transition hover:border-red-500/40 hover:bg-white/[0.06]"
-                    >
-                      Ver outros veículos
-                    </a>
+                  {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
+
+                  <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
                     <button
                       type="button"
-                      onClick={() => {
-                        setStep(0);
-                        scrollToForm();
-                      }}
-                      className="inline-flex min-h-11 items-center justify-center rounded-md border border-white/15 px-5 text-sm font-semibold text-white transition hover:border-red-500/40 hover:bg-white/[0.06]"
+                      onClick={openWhatsapp}
+                      className="premium-button cta-motion inline-flex min-h-12 items-center justify-center gap-2 rounded-sm px-6 text-sm font-semibold text-white"
                     >
-                      Alterar perfil
+                      <span>Falar com Breno sobre minha curadoria</span>
+                      <span className="cta-arrow" aria-hidden="true">↗</span>
                     </button>
-                    <button
-                      type="button"
-                      onClick={handleResetMatch}
-                      className="inline-flex min-h-11 items-center justify-center rounded-md border border-white/15 px-5 text-sm font-semibold text-white transition hover:border-red-500/40 hover:bg-white/[0.06]"
+                    <Link
+                      href="/veiculos"
+                      className="inline-flex min-h-12 items-center justify-center rounded-sm border border-white/15 px-6 text-sm font-semibold text-white transition hover:border-red-500/40 hover:bg-white/[0.05]"
                     >
-                      Refazer Match
-                    </button>
-                    <BackToHomeButton />
+                      Ver veículos
+                    </Link>
                   </div>
                 </div>
-              </fieldset>
-            ) : null}
+              ) : null}
+            </div>
 
-            {step === 1 ? (
-              <fieldset>
-                <legend className="text-xs font-semibold uppercase tracking-[0.28em] text-zinc-300">
-                  Qual faixa de investimento faz sentido agora?
-                </legend>
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  {budgets.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => setBudget(item)}
-                      className={`min-h-14 border px-4 text-left text-sm font-medium transition duration-300 hover:scale-[1.01] ${
-                        item === budget
-                          ? "border-red-500/40 bg-red-950/20 text-white"
-                          : "border-white/10 bg-black/20 text-zinc-400 hover:border-white/25"
-                      }`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </fieldset>
-            ) : null}
-
-            {step === 2 ? (
-              <fieldset>
-                <legend className="text-xs font-semibold uppercase tracking-[0.28em] text-zinc-300">
-                  O que pesa mais na sua decisao?
-                </legend>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {priorities.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => setPriority(item)}
-                      className={`min-h-10 border px-4 text-sm transition ${
-                        item === priority
-                          ? "border-red-500/40 bg-red-950/20 text-white"
-                          : "border-white/10 bg-black/20 text-zinc-400 hover:border-white/25"
-                      }`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </fieldset>
-            ) : null}
-
-            {step === 3 ? (
-              <fieldset>
-                <legend className="text-xs font-semibold uppercase tracking-[0.28em] text-zinc-300">
-                  Receber curadoria
-                </legend>
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <label className="block">
-                    <span className="text-xs uppercase tracking-[0.18em] text-zinc-500">
-                      Nome
-                    </span>
-                    <input
-                      value={name}
-                      onChange={(event) => setName(event.target.value)}
-                      className="mt-2 h-12 w-full border border-white/10 bg-black/30 px-4 text-sm text-white placeholder:text-zinc-600"
-                      placeholder="Seu nome"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="text-xs uppercase tracking-[0.18em] text-zinc-500">
-                      WhatsApp
-                    </span>
-                    <input
-                      value={phone}
-                      onChange={(event) => setPhone(event.target.value)}
-                      className="mt-2 h-12 w-full border border-white/10 bg-black/30 px-4 text-sm text-white placeholder:text-zinc-600"
-                      inputMode="tel"
-                      placeholder="(92) 99999-9999"
-                    />
-                  </label>
-                </div>
-                {error ? (
-                  <p className="mt-3 text-sm text-red-300">{error}</p>
-                ) : null}
-                {submitted ? (
-                  <div
-                    ref={completionRef}
-                    className="mt-5 border border-red-500/25 bg-red-950/15 p-4"
-                  >
-                    <p className="text-sm font-semibold text-white">
-                      Curadoria enviada para o WhatsApp.
-                    </p>
-                    <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                      <BackToHomeButton />
-                      <a
-                        href={whatsappUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="premium-button inline-flex min-h-11 items-center justify-center rounded-md px-5 text-sm font-semibold text-white"
-                      >
-                        <span>Falar com Breno</span>
-                      </a>
-                      <a
-                        href="#lista-vip"
-                        className="inline-flex min-h-11 items-center justify-center rounded-md border border-white/15 px-5 text-sm font-semibold text-white transition hover:border-red-500/40 hover:bg-white/[0.06]"
-                      >
-                        Receber Curadoria VIP
-                      </a>
-                    </div>
-                  </div>
-                ) : null}
-              </fieldset>
-            ) : null}
-          </div>
-
-          <div className="mt-5 flex flex-col-reverse gap-3 border-t border-white/10 pt-5 sm:flex-row sm:justify-between">
-            <button
-              type="button"
-              onClick={handlePreviousStep}
-              disabled={step === 0}
-              className="inline-flex min-h-11 items-center justify-center rounded-md border border-white/12 px-5 text-sm font-semibold text-zinc-300 transition hover:border-white/25 hover:bg-white/[0.04] disabled:cursor-not-allowed disabled:opacity-35"
-            >
-              Voltar
-            </button>
-            {step < 3 ? (
+            <div className="mt-6 flex flex-col-reverse gap-3 border-t border-white/10 pt-5 sm:flex-row sm:justify-between">
               <button
                 type="button"
-                onClick={handleNextStep}
-                className="premium-button inline-flex min-h-11 items-center justify-center rounded-md px-5 text-sm font-semibold text-white"
+                onClick={() => goToStep(step - 1)}
+                disabled={step === 0}
+                className="inline-flex min-h-11 items-center justify-center rounded-sm border border-white/12 px-5 text-sm font-semibold text-zinc-300 transition hover:border-white/25 hover:bg-white/[0.04] disabled:cursor-not-allowed disabled:opacity-35"
               >
-                <span>Continuar</span>
+                Voltar
               </button>
-            ) : (
-              <button
-                type="submit"
-                className="premium-button inline-flex min-h-11 items-center justify-center rounded-md px-5 text-sm font-semibold text-white"
-              >
-                <span>Receber selecao personalizada</span>
-              </button>
-            )}
+              {step < steps.length - 1 ? (
+                <button
+                  type="button"
+                  onClick={() => goToStep(step + 1)}
+                  className="premium-button cta-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 text-sm font-semibold text-white"
+                >
+                  <span>Continuar</span>
+                  <span className="cta-arrow" aria-hidden="true">→</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => goToStep(0)}
+                  className="inline-flex min-h-11 items-center justify-center rounded-sm border border-white/12 px-5 text-sm font-semibold text-zinc-300 transition hover:border-white/25 hover:bg-white/[0.04]"
+                >
+                  Ajustar respostas
+                </button>
+              )}
+            </div>
           </div>
-        </form>
+        ) : null}
       </div>
     </AnimatedSection>
+  );
+}
+
+function OptionButton({
+  selected,
+  onClick,
+  title,
+  text,
+}: {
+  selected: boolean;
+  onClick: () => void;
+  title: string;
+  text: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`min-h-28 rounded-sm border p-4 text-left transition duration-300 hover:border-white/25 ${
+        selected
+          ? "border-red-500/55 bg-red-950/20 text-white"
+          : "border-white/10 bg-black/20 text-zinc-400"
+      }`}
+      aria-pressed={selected}
+    >
+      <span className="block text-sm font-semibold text-white">{title}</span>
+      <span className="mt-2 block text-sm leading-6">{text}</span>
+    </button>
+  );
+}
+
+function ChoiceButton({
+  selected,
+  onClick,
+  compact = false,
+  children,
+}: {
+  selected: boolean;
+  onClick: () => void;
+  compact?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-sm border text-left text-sm font-medium transition hover:border-white/25 ${
+        compact ? "min-h-10 px-4" : "min-h-12 px-4"
+      } ${
+        selected
+          ? "border-red-500/55 bg-red-950/20 text-white"
+          : "border-white/10 bg-black/20 text-zinc-400"
+      }`}
+      aria-pressed={selected}
+    >
+      {children}
+    </button>
+  );
+}
+
+function TextInput({
+  label,
+  value,
+  onChange,
+  placeholder,
+  inputMode,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  inputMode?: InputHTMLAttributes<HTMLInputElement>["inputMode"];
+}) {
+  return (
+    <label className="block">
+      <span className="text-xs uppercase tracking-[0.18em] text-zinc-500">
+        {label}
+      </span>
+      <input
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="mt-2 h-12 w-full rounded-sm border border-white/10 bg-black/35 px-4 text-sm text-white placeholder:text-zinc-600 transition focus:border-red-400/50 focus:bg-black/50"
+        placeholder={placeholder}
+        inputMode={inputMode}
+      />
+    </label>
+  );
+}
+
+function RecommendationCard({ vehicle, index }: { vehicle: Vehicle; index: number }) {
+  return (
+    <article
+      className="curatorship-result-card overflow-hidden border border-white/10 bg-[#08080a]"
+      style={{ "--result-delay": `${150 + index * 100}ms` } as CSSProperties}
+    >
+      <div className="relative aspect-[16/10] overflow-hidden bg-zinc-950">
+        <PremiumImage
+          src={vehicle.image}
+          alt={`${vehicle.brand} ${vehicle.model}`}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover"
+          style={{ objectPosition: vehicle.imagePosition ?? "50% 50%" }}
+        />
+      </div>
+      <div className="p-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-300">
+          {vehicle.brand}
+        </p>
+        <h5 className="mt-2 text-xl font-semibold text-white">{vehicle.model}</h5>
+        <p className="mt-2 text-sm leading-6 text-zinc-400">
+          {vehicle.recommendation}
+        </p>
+      </div>
+    </article>
   );
 }

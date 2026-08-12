@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { FixedWhatsappButton } from "@/components/fixed-whatsapp-button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { VehicleDetail } from "@/components/VehicleDetail";
@@ -45,7 +44,6 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
     <>
       <SiteHeader />
       <VehicleDetail vehicle={vehicle} />
-      <FixedWhatsappButton />
       <SiteFooter />
     </>
   );

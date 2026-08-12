@@ -1,6 +1,5 @@
 import { ConciergeConfigurator } from "@/components/ConciergeConfigurator";
 import { FinalCTA } from "@/components/FinalCTA";
-import { FixedWhatsappButton } from "@/components/fixed-whatsapp-button";
 import { Hero } from "@/components/Hero";
 import { MatchScoreSection } from "@/components/MatchScoreSection";
 import { ScrollReveal } from "@/components/scroll-reveal";
@@ -17,13 +16,12 @@ export default function Home() {
       <SiteHeader />
       <main>
         <Hero />
+        <VehicleCatalog />
         <ConciergeConfigurator />
         <MatchScoreSection />
-        <VehicleCatalog />
         <AboutBreno />
         <VipLeadForm />
         <FinalCTA />
-        <FixedWhatsappButton />
       </main>
       <SiteFooter />
     </>

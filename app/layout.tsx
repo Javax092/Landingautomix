@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
@@ -18,6 +19,11 @@ export const metadata: Metadata = {
   title: "Breno Automix Manaus | Curadoria Premium",
   description:
     "Curadoria automotiva premium em Manaus para escolher o carro certo para seu perfil, orcamento e rotina.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
